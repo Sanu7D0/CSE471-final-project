@@ -16,13 +16,10 @@ Game::Game(double firstX, double firstY, int width, int height)
 		gProjectionMatrix),
 	baseShader(Shader("resource/shader/Base.vert", "resource/shader/Base.frag"))
 {
-	VBO = VAO = 0;
 }
 
 Game::~Game()
 {
-	glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &VBO);
 }
 
 void Game::init()
@@ -45,8 +42,10 @@ void Game::init()
 		nullptr, 
 		Transform(glm::vec3(0.0f, 0.0f, 0.0f)),
 		Model("resource/model/gorilla.obj")));
-
-	glGenVertexArrays(1, &VAO);
+	_gameObjects.push_back(std::make_shared<GameObject>(
+		nullptr,
+		Transform(glm::vec3(5.0f, 3.0f, 0.0f)),
+		Model("resource/model/magma_block.obj")));
 }
 
 void Game::processInput(const float dt)
@@ -121,8 +120,6 @@ void Game::render()
 	{
 		go->draw(baseShader);
 	}
-
-	glBindVertexArray(VAO);
 }
 
 void Game::collisions()

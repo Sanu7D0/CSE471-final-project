@@ -40,5 +40,4 @@ public:
 private:
 	std::unique_ptr<Player> _player;
 	std::vector<std::shared_ptr<GameObject>> _gameObjects;
-	GLuint VBO, VAO;
 };

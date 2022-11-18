@@ -41,6 +41,8 @@ public:
 		// Our textures
 		uint32_t diffuseNr = 1;
 		uint32_t specularNr = 1;
+		uint32_t normalNr = 1;
+		uint32_t heightNr = 1;
 
 		// Setup textures
 		for (uint32_t i = 0; i < textures.size(); ++i)
@@ -53,16 +55,23 @@ public:
 				number = std::to_string(diffuseNr++);
 			else if (name == "texture_specular")
 				number = std::to_string(specularNr++);
+			else if (name == "texture_normal")
+				number = std::to_string(normalNr++);
+			else if (name == "texture_height")
+				number = std::to_string(heightNr++);
 
-			shader.setInt(("material." + name + number), i);
+			//shader.setInt(("material." + name + number), i);
+			glUniform1i(glGetUniformLocation(shader.ID, (name + number).c_str()), i);
 			glBindTexture(GL_TEXTURE_2D, textures[i].id);
 		}
-		glActiveTexture(GL_TEXTURE0);
 
 		// Draw mesh
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, nullptr);
 		glBindVertexArray(0);
+
+		//glBindTexture(GL_TEXTURE_2D, 0);
+		glActiveTexture(GL_TEXTURE0);
 	}
 
 private:
