@@ -32,6 +32,7 @@ public:
 	Mesh(std::vector<Vertex> vertices, std::vector<uint32_t> indices, std::vector<Texture> textures)
 		: vertices(std::move(vertices)), indices(std::move(indices)), textures(std::move(textures))
 	{
+		VAO = VBO = EBO = 0;
 		setupMesh();
 	}
 

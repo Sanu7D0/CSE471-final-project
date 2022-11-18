@@ -7,11 +7,10 @@
 #include <vector>
 
 #include "rendering/Shader.hpp"
-//#include "rendering/Model.hpp"
+#include "rendering/Model.hpp"
 
-class Transform
+struct Transform
 {
-public:
 	glm::vec3 position;
 	glm::quat rotation;
 	glm::vec3 scale;
@@ -43,8 +42,11 @@ public:
 	Transform transform;
 	glm::vec3 velocity = glm::vec3(0.0f, 0.0f, 0.0f);
 
+	GameObject(const std::shared_ptr<GameObject>& parent, Transform transform, Model model);
 
-	GameObject(const std::shared_ptr<GameObject>& parent, Transform transform);
+	virtual void draw(const Shader& shader) const;
+	virtual void move(const float dt);
 
-	virtual void draw() const = 0;
+protected:
+	Model model;
 };

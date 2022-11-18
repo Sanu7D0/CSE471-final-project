@@ -9,9 +9,8 @@ class Player : public GameObject
 public:
 	//glm::vec3 forward = glm::vec3(0.0f, 0.0f, 1.0f);
 
-	explicit Player(Transform t);
-	void draw() const override;
-	void move(float dt);
+	explicit Player(Transform t, Model model);
+	void move(const float dt) override;
 
 private:
 	float _speed = 3.0f;

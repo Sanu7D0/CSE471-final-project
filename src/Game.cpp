@@ -14,7 +14,7 @@ Game::Game(double firstX, double firstY, int width, int height)
 		CameraControl(Transform(glm::vec3(0.0f, 0.0f, -5.0f)), width, height),
 		gViewMatrix,
 		gProjectionMatrix),
-	baseShader(Shader("resource/shader/Base.vs", "resource/shader/Base.fs"))
+	baseShader(Shader("resource/shader/Base.vert", "resource/shader/Base.frag"))
 {
 	VBO = VAO = 0;
 }
@@ -37,7 +37,14 @@ void Game::init()
 		controller.cameraControl.far
 	);
 
-	_player = std::make_unique<Player>(Transform(glm::vec3(0.0f, 0.0f, -5.0f)));
+	_player = std::make_unique<Player>(
+		Transform(glm::vec3(0.0f, 0.0f, -5.0f)), 
+		Model("resource/model/gorilla.obj"));
+
+	_gameObjects.push_back(std::make_shared<GameObject>(
+		nullptr, 
+		Transform(glm::vec3(0.0f, 0.0f, 0.0f)),
+		Model("resource/model/gorilla.obj")));
 
 	glGenVertexArrays(1, &VAO);
 }
@@ -109,6 +116,11 @@ void Game::render()
 
 	baseShader.use();
 	baseShader.setMat4("viewProj", gProjectionMatrix * gViewMatrix);
+
+	for (const auto& go : _gameObjects)
+	{
+		go->draw(baseShader);
+	}
 
 	glBindVertexArray(VAO);
 }

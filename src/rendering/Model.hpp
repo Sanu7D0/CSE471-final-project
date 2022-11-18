@@ -24,8 +24,6 @@ public:
 	std::string directory;
 	bool gammaCorrection;
 
-	// texture
-
 	Model(std::string const &path, bool gamma = false) : gammaCorrection(gamma)
 	{
 		loadModel(path);
@@ -33,7 +31,6 @@ public:
 
 	void draw(const Shader& shader) const
 	{
-		// texture.bind();
 		for (const auto& mesh : meshes)
 			mesh.draw(shader);
 	}
@@ -42,7 +39,7 @@ private:
 	void loadModel(std::string const &path)
 	{
 		Assimp::Importer importer;
-		const aiScene* scene = importer.ReadFile(ROOT_DIR + path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+		const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
 
 		if (!scene || (scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE) || !scene->mRootNode)
 		{
@@ -51,11 +48,7 @@ private:
 		}
 
 		// Retrieve the file directory
-#if defined(_WIN32) || defined(_WIN64)
-		directory = path.substr(0, path.find_last_of('\\')); // window: '\\'
-#else
 		directory = path.substr(0, path.find_last_of('/'));
-#endif
 
 		processNode(scene->mRootNode, scene);
 	}

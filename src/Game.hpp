@@ -2,6 +2,7 @@
 #include <glad/glad.h>
 
 #include <memory>
+#include <vector>
 
 #include "Controller.hpp"
 #include "Player.hpp"
@@ -27,7 +28,6 @@ public:
 
 	Shader baseShader;
 
-	//explicit Game(Controller controller);
 	Game(double firstX, double firstY, int width, int height);
 	~Game();
 
@@ -39,5 +39,6 @@ public:
 
 private:
 	std::unique_ptr<Player> _player;
+	std::vector<std::shared_ptr<GameObject>> _gameObjects;
 	GLuint VBO, VAO;
 };

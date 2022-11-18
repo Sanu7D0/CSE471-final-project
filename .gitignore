@@ -1,3 +1,6 @@
+# Include .obj model files
+!resource/**/*.obj
+
 # User-specific files
 *.rsuser
 *.suo
