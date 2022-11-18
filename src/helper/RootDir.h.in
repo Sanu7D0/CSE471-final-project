@@ -1,0 +1,2 @@
+#pragma once
+inline const char *ROOT_DIR = "${CMAKE_SOURCE_DIR}/";
