@@ -1,11 +1,9 @@
 #pragma once
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
 
-#include "GameObject.hpp"
+#include "Player.hpp"
 
 enum ECameraMode
 {
@@ -25,27 +23,29 @@ struct MouseControl
 
 struct CameraControl
 {
-	Transform transform;
-	glm::vec3 followPosition;
+	//Transform transform;
+	glm::vec3 center;
+	glm::vec3 offsetInitial = glm::vec3(0.0f, 0.0f, -1.0f);
+	glm::vec3 offset = offsetInitial;
+	std::shared_ptr<Player> player;
 
 	float yaw = 0.0f; // in degree
 	float pitch = 0.0f; // in degree
+	//float roll = 0.0f; // in degree
 
 	unsigned int width, height;
-	ECameraMode mode = ECameraMode::FPS;
+	ECameraMode mode = ECameraMode::TPS;
 
+	const float radius = 3.0f;
 	const float pitchMin = -89.0f; // in degree
 	const float pitchMax = 89.0f; // in degree
 	const float fov = 50.0f;
 	const float near = 0.1f;
 	const float far = 30.0f;
 
-	CameraControl(Transform transform, unsigned int width, unsigned int height)
-		: transform(transform), followPosition(transform.position), width(width), height(height)
-	{
-	}
+	CameraControl(glm::vec3 center, unsigned int width, unsigned int height);
 
-	void followTargetPosition(float dt);
+	void followPlayer(float dt);
 };
 
 class Controller
@@ -59,6 +59,7 @@ public:
 
 	Controller(MouseControl mouse, CameraControl camera, glm::mat4& view, glm::mat4& projection);
 
+	void init(const std::shared_ptr<Player> &player);
 	void update(float dt);
 
 	void onFramebufferSizeCallback(unsigned int width, unsigned int height);

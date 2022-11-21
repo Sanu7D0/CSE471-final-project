@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "Controller.hpp"
+#include "GameObject.hpp"
 #include "Player.hpp"
 #include "rendering/Shader.hpp"
 
@@ -38,6 +39,6 @@ public:
 	void collisions();
 
 private:
-	std::unique_ptr<Player> _player;
+	std::shared_ptr<Player> _player;
 	std::vector<std::shared_ptr<GameObject>> _gameObjects;
 };

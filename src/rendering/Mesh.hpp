@@ -61,16 +61,17 @@ public:
 				number = std::to_string(heightNr++);
 
 			//shader.setInt(("material." + name + number), i);
-			glUniform1i(glGetUniformLocation(shader.ID, (name + number).c_str()), i);
 			glBindTexture(GL_TEXTURE_2D, textures[i].id);
+			glUniform1i(glGetUniformLocation(shader.ID, (name + number).c_str()), i);
 		}
 
 		// Draw mesh
 		glBindVertexArray(VAO);
-		glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, nullptr);
+		glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indices.size()), GL_UNSIGNED_INT, nullptr);
 		glBindVertexArray(0);
 
-		//glBindTexture(GL_TEXTURE_2D, 0);
+		// Reset texture
+		glBindTexture(GL_TEXTURE_2D, 0);
 		glActiveTexture(GL_TEXTURE0);
 	}
 
@@ -85,10 +86,10 @@ private:
 		// Load data into buffers
 		glBindVertexArray(VAO);
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), vertices.data(), GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(vertices.size() * sizeof(Vertex)), vertices.data(), GL_STATIC_DRAW);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, static_cast<GLsizeiptr>(indices.size() * sizeof(unsigned int)), indices.data(), GL_STATIC_DRAW);
 
 		// Set vertex attribute pointers
 		glEnableVertexAttribArray(0); // positions

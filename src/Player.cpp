@@ -1,6 +1,6 @@
 #include "Player.hpp"
 
-Player::Player(Transform t, Model model) : GameObject(nullptr, t, std::move(model))
+Player::Player(Transform t, Model model_) : GameObject(nullptr, t, std::move(model_))
 {
 }
 

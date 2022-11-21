@@ -159,10 +159,10 @@ private:
 		glGenTextures(1, &textureID);
 
 		int width, height, nrComponents;
-		unsigned char* data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
-		if (data)
+		if (unsigned char* data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0))
 		{
-			GLenum format;
+			std::cout << "nrComponents: " << nrComponents << "\n";
+			GLenum format = GL_RGB;
 			if (nrComponents == 1)
 				format = GL_RED;
 			else if (nrComponents == 3)
@@ -185,8 +185,10 @@ private:
 		{
 			std::cout << "Texture failed to load at path: " << path << std::endl;
 			stbi_image_free(data);
+			return 0;
 		}
 
+		std::cout << "Load texture: " << path << std::endl;
 		return textureID;
 	}
 };
