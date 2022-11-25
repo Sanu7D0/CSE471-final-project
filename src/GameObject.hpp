@@ -10,6 +10,7 @@
 #include "rendering/Shader.hpp"
 #include "rendering/Model.hpp"
 #include "physics/Collider.hpp"
+#include "Globals.hpp"
 
 inline constexpr float gAxesPoints[36] = {
 	// 3 vertex, 3 color
@@ -25,7 +26,7 @@ inline GLuint gAxesVAO, gAxesVBO;
 
 inline void InitAxesShader()
 {
-	gAxesShader = new Shader("resource/shader/Axes.vert", "resource/shader/Axes.frag");
+	gAxesShader = new Shader("resource/shader/Line.vert", "resource/shader/Line.frag");
 
 	glGenVertexArrays(1, &gAxesVAO);
 	glGenBuffers(1, &gAxesVBO);

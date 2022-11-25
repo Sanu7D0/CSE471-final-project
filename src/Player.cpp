@@ -11,7 +11,7 @@ void Player::move(const float dt)
 
 	const glm::vec3 forward = transform.rotation * glm::vec3(0.0f, 0.0f, 1.0f);
 	//const glm::vec3 left = cross(forward, glm::vec3(0.0f, 1.0f, 0.0f));
-	const glm::vec3 right = cross(glm::vec3(0.0f, 1.0f, 0.0f), forward); // right hand rule
+	const glm::vec3 right = cross(glm::vec3(0.0f, -1.0f, 0.0f), forward); // right hand rule
 
 	transform.position += dt * _speed * (right * velocity.x + forward * velocity.z);
 }

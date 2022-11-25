@@ -11,13 +11,10 @@ void GameObject::draw(const Shader& shader) const
 	shader.setMat4("model", transform.getModelMatrix());
 	model.draw(shader);
 
-	drawAxes();
-
-	// TODO: recursive draw for children
-	/*for (auto child : children)
+	if (Globals::debug)
 	{
-		children->draw(shader);
-	}*/
+		drawAxes();
+	}
 }
 
 void GameObject::drawAxes() const

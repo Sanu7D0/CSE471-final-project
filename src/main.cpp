@@ -5,9 +5,7 @@
 #include <memory>
 
 #include "Game.hpp"
-
-//constexpr unsigned int SCREEN_WIDTH = 800;
-//constexpr unsigned int SCREEN_HEIGHT = 600;
+#include "Globals.hpp"
 
 std::unique_ptr<Game> gGame;
 
@@ -24,20 +22,22 @@ int main(int argc, char* argv[])
 	GLFWwindow* window;
 	if (!init(window)) return -1;
 
-	float deltaTime = 0.0f;
-	float lastFrame = 0.0f;
+	double lastTime = glfwGetTime();
+	//uint32_t frames = 0;
+
 	while (!glfwWindowShouldClose(window))
 	{
-		const auto currentFrame = static_cast<float>(glfwGetTime());
-		deltaTime = currentFrame - lastFrame;
-		lastFrame = currentFrame;
+		const double currentTime = glfwGetTime();
+		const double deltaTime = currentTime - lastTime;
+		lastTime = currentTime;
+
 		glfwPollEvents();
 
 		// manage user input
-		gGame->processInput(deltaTime);
+		gGame->processInput(static_cast<float>(deltaTime));
 
 		// update game state
-		gGame->update(deltaTime);
+		gGame->update(static_cast<float>(deltaTime));
 
 		// render
 		gGame->render();
@@ -66,7 +66,6 @@ bool init(GLFWwindow*& window)
 	const auto monitor = glfwGetPrimaryMonitor();
 	const auto mode = glfwGetVideoMode(monitor);
 
-	//window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "BackToCG", nullptr, nullptr);
 	window = glfwCreateWindow(mode->width, mode->height, "BackToCG", monitor, nullptr);
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // Hide cursor
 	glfwMakeContextCurrent(window);
@@ -83,10 +82,7 @@ bool init(GLFWwindow*& window)
 	glfwSetMouseButtonCallback(window, MouseButtonCallback);
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-	//glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 	glViewport(0, 0, mode->width, mode->height);
-	//glEnable(GL_BLEND);
-	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	initLight();
 

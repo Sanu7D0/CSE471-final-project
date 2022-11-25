@@ -38,12 +38,13 @@ public:
 private:
 	void loadModel(std::string const &path)
 	{
+		std::cout << "Load model: " << path << "\n";
 		Assimp::Importer importer;
-		const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+		const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
 
 		if (!scene || (scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE) || !scene->mRootNode)
 		{
-			std::cerr << "Error/assimp: " << importer.GetErrorString() << std::endl;
+			std::cerr << "assimp: " << importer.GetErrorString() << std::endl;
 			return;
 		}
 
@@ -79,9 +80,18 @@ private:
 				               ? glm::vec3(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z)
 				               : glm::vec3(0.0f, 0.0f, 0.0f));
 			// Check the mesh contains texture coordinates
-			auto texCoord = (mesh->mTextureCoords[0]
-				                      ? glm::vec2(mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y)
-				                      : glm::vec2(0.0f, 0.0f));
+			glm::vec2 texCoord;
+			if (mesh->mTextureCoords[0])
+			{
+				texCoord = glm::vec2(mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y);
+
+				/*auto tangent = glm::vec3(mesh->mTangents[i].x, mesh->mTangents[i].y, mesh->mTangents[i].z);
+				auto bitangent = glm::vec3(mesh->mBitangents[i].x, mesh->mBitangents[i].y, mesh->mBitangents[i].z);*/
+			}
+			else
+			{
+				texCoord = glm::vec2(0.0f, 0.0f);
+			}
 
 			vertices.emplace_back(position, normal, texCoord);
 		}
@@ -100,26 +110,26 @@ private:
 		std::vector<Texture> textures;
 
 		// diffuse: texture_diffuseN
-		// specular: texture_specularN
-		// normal: texture_normalN
-
 		std::vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
 		textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 
+		// specular: texture_specularN
 		std::vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
 		textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 
+		// normal: texture_normalN
 		std::vector<Texture> normalMaps = loadMaterialTextures(material, aiTextureType_NORMALS, "texture_normal");
 		textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
 
-		std::vector<Texture> heightMaps = loadMaterialTextures(material, aiTextureType_HEIGHT, "texture_height");
-		textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
+		/*std::vector<Texture> heightMaps = loadMaterialTextures(material, aiTextureType_HEIGHT, "texture_height");
+		textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());*/
 
 		return {vertices, indices, textures};
 	}
 
 	std::vector<Texture> loadMaterialTextures(const aiMaterial *material, aiTextureType type, const std::string &typeName)
 	{
+		std::cout << "Materials: " << material->GetTextureCount(type) << "\n";
 		std::vector<Texture> textures;
 		for (uint32_t i = 0; i < material->GetTextureCount(type); ++i)
 		{
@@ -127,11 +137,11 @@ private:
 			material->GetTexture(type, i, &str);
 
 			bool skip = false; // Check if the texture loaded once before
-			for (uint32_t j = 0; j < textures_loaded.size(); ++j)
+			for (const auto& texture : textures_loaded)
 			{
-				if (std::strcmp(textures_loaded[j].path.data(), str.C_Str()) == 0)
+				if (std::strcmp(texture.path.data(), str.C_Str()) == 0)
 				{
-					textures.push_back(textures_loaded[j]);
+					textures.push_back(texture);
 					skip = true; // The texture has already been loaded
 					break;
 				}
@@ -150,7 +160,7 @@ private:
 		return textures;
 	}
 
-	uint32_t textureFromFile(const char* path, const std::string& directory_, bool gamma) const
+	GLuint textureFromFile(const char* path, const std::string& directory_, bool gamma) const
 	{
 		std::string filename = std::string(path);
 		filename = directory_ + '/' + filename; // windows: '\\'
@@ -161,7 +171,6 @@ private:
 		int width, height, nrComponents;
 		if (unsigned char* data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0))
 		{
-			std::cout << "nrComponents: " << nrComponents << "\n";
 			GLenum format = GL_RGB;
 			if (nrComponents == 1)
 				format = GL_RED;
@@ -179,6 +188,7 @@ private:
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+			glBindTexture(GL_TEXTURE_2D, 0);
 			stbi_image_free(data);
 		}
 		else

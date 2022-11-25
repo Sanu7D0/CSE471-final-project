@@ -23,7 +23,6 @@ struct Texture
 
 class Mesh
 {
-	GLuint VAO, VBO, EBO;
 public:
 	std::vector<Vertex> vertices;
 	std::vector<uint32_t> indices;
@@ -32,7 +31,6 @@ public:
 	Mesh(std::vector<Vertex> vertices, std::vector<uint32_t> indices, std::vector<Texture> textures)
 		: vertices(std::move(vertices)), indices(std::move(indices)), textures(std::move(textures))
 	{
-		VAO = VBO = EBO = 0;
 		setupMesh();
 	}
 
@@ -60,9 +58,8 @@ public:
 			else if (name == "texture_height")
 				number = std::to_string(heightNr++);
 
-			//shader.setInt(("material." + name + number), i);
-			glBindTexture(GL_TEXTURE_2D, textures[i].id);
 			glUniform1i(glGetUniformLocation(shader.ID, (name + number).c_str()), i);
+			glBindTexture(GL_TEXTURE_2D, textures[i].id);
 		}
 
 		// Draw mesh
@@ -71,11 +68,13 @@ public:
 		glBindVertexArray(0);
 
 		// Reset texture
-		glBindTexture(GL_TEXTURE_2D, 0);
 		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
 private:
+	GLuint VAO, VBO, EBO;
+
 	void setupMesh()
 	{
 		// Create buffers
@@ -99,8 +98,9 @@ private:
 		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
 
 		glEnableVertexAttribArray(2); // texture coords
-		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, texCoord));
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, texCoord));
 
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindVertexArray(0);
 	}
 };
