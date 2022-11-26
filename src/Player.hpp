@@ -4,12 +4,14 @@
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 
+#include "Shooting.hpp"
+
 class Player : public GameObject
 {
 public:
-	//glm::vec3 forward = glm::vec3(0.0f, 0.0f, 1.0f);
+	Gun gun = Gun(10);
 
-	explicit Player(Transform t, Model model_);
+	Player(Transform t, Model model_);
 	void move(const float dt) override;
 
 private:

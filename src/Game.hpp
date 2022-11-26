@@ -4,7 +4,7 @@
 #include <memory>
 #include <vector>
 
-#include "Controller.hpp"
+#include "ViewController.hpp"
 #include "GameObject.hpp"
 #include "Player.hpp"
 #include "rendering/Shader.hpp"
@@ -23,11 +23,12 @@ enum EGameState
 class Game
 {
 public:
-	Controller controller;
+	ViewController viewController;
 
 	EGameState state = GameActive;
 	bool keys[1024] = {};
 	bool keysProcessed[1024] = {};
+	bool mouseButtons[8] = {};
 
 	Shader baseShader;
 	Shader textShader;
@@ -45,6 +46,6 @@ private:
 	std::shared_ptr<Player> _player;
 	std::vector<std::shared_ptr<GameObject>> _gameObjects;
 
-	void collisions();
+	void drawUI();
 	void drawDebugInfo();
 };

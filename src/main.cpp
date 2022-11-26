@@ -102,9 +102,7 @@ void initLight()
 
 static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
-	std::clog << "Key callback: key=" << key << " scancode=" << scancode << " action=" << action << " mode=" << mode <<
-		"\n";
-	// when a user presses the escape key, we set the WindowShouldClose property to true, closing the application
+	//std::clog << "Key callback: key=" << key << " scancode=" << scancode << " action=" << action << " mode=" << mode << "\n";
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) glfwSetWindowShouldClose(window, true);
 	if (key >= 0 && key < 1024)
 	{
@@ -115,31 +113,32 @@ static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, i
 			gGame->keysProcessed[key] = false;
 		}
 	}
-
-	//GLFW_REPEAT = key holding
 }
 
 static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 {
-	std::clog << "Mouse button callback: button=" << button << " action=" << action << " mods=" << mods << "\n";
-	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+	//std::clog << "Mouse button callback: button=" << button << " action=" << action << " mods=" << mods << "\n";
+	if (button >= 0 && button < 8)
 	{
-		//
-	}
-	else if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
-	{
-		//
+		if (action == GLFW_PRESS)
+		{
+			gGame->mouseButtons[button] = true;
+		}
+		else if (action == GLFW_RELEASE)
+		{
+			gGame->mouseButtons[button] = false;
+		}
 	}
 }
 
 static void CursorPositionCallback(GLFWwindow* window, double xpos, double ypos)
 {
 	//std::clog << "Cursor position callback: " << std::fixed << xpos << " " << ypos << "\n";
-	gGame->controller.onCursorPositionCallback(xpos, ypos);
+	gGame->viewController.onCursorPositionCallback(xpos, ypos);
 }
 
 void FramebufferSizeCallback(GLFWwindow* window, int width, int height)
 {
 	glViewport(0, 0, width, height);
-	gGame->controller.onFramebufferSizeCallback(width, height);
+	gGame->viewController.onFramebufferSizeCallback(width, height);
 }

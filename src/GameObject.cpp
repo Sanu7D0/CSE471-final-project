@@ -7,8 +7,12 @@ GameObject::GameObject(const std::shared_ptr<GameObject>& parent, Transform tran
 
 void GameObject::draw(const Shader& shader) const
 {
+	const auto modelMat = transform.getModelMatrix();
+
 	shader.use();
-	shader.setMat4("model", transform.getModelMatrix());
+	shader.setMat4("model", modelMat);
+	shader.setMat4("model_inverse", glm::inverse(modelMat));
+
 	model.draw(shader);
 
 	if (Globals::debug)

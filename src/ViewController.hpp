@@ -3,8 +3,6 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 
-#include "Player.hpp"
-
 enum ECameraMode
 {
 	FPS,
@@ -23,15 +21,14 @@ struct MouseControl
 
 struct CameraControl
 {
-	//Transform transform;
 	glm::vec3 center;
+	glm::vec3 eye;
 	glm::vec3 offsetInitial = glm::vec3(0.0f, 0.0f, -1.0f);
 	glm::vec3 offset = offsetInitial;
-	std::shared_ptr<Player> player;
+	glm::vec3 followingTarget;
 
 	float yaw = 0.0f; // in degree
 	float pitch = 0.0f; // in degree
-	//float roll = 0.0f; // in degree
 
 	unsigned int width, height;
 	ECameraMode mode = ECameraMode::TPS;
@@ -45,10 +42,10 @@ struct CameraControl
 
 	CameraControl(glm::vec3 center, unsigned int width, unsigned int height);
 
-	void followPlayer(float dt);
+	void followTarget(float dt);
 };
 
-class Controller
+class ViewController
 {
 public:
 	MouseControl mouseControl;
@@ -57,9 +54,8 @@ public:
 	glm::mat4& viewMatrix;
 	glm::mat4& projectionMatrix;
 
-	Controller(MouseControl mouse, CameraControl camera, glm::mat4& view, glm::mat4& projection);
+	ViewController(MouseControl mouse, CameraControl camera, glm::mat4& view, glm::mat4& projection);
 
-	void init(const std::shared_ptr<Player> &player);
 	void update(float dt);
 
 	void onFramebufferSizeCallback(unsigned int width, unsigned int height);

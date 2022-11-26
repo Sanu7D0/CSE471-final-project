@@ -10,7 +10,7 @@
 #include <format>
 
 Game::Game(double firstX, double firstY, int width, int height)
-	: controller(
+	: viewController(
 		MouseControl(firstX, firstY),
 		CameraControl(glm::vec3(0.0f, 0.0f, -5.0f), width, height),
 		gViewMatrix,
@@ -34,8 +34,6 @@ void Game::init()
 		Model("resource/model/gorilla.obj"));
 	_gameObjects.push_back(_player);
 
-	controller.init(_player);
-
 	/*_gameObjects.push_back(std::make_shared<GameObject>(
 		nullptr, 
 		Transform(glm::vec3(0.0f, 0.0f, 0.0f)),
@@ -48,6 +46,8 @@ void Game::init()
 		nullptr,
 		Transform(glm::vec3(-5.0f, 1.0f, 0.0f)),
 		Model("resource/model/magma_block.obj")));
+
+	baseShader.setVec3("lightPos", glm::vec3(0.0f, 0.0f, 0.0f));
 }
 
 void Game::processInput(const float dt)
@@ -70,45 +70,57 @@ void Game::processInput(const float dt)
 		}
 
 		// Player movement
-		float horizontalInput = 0.0f;
-		float forwardInput = 0.0f;
-		if (keys[GLFW_KEY_W])
 		{
-			// move forward
-			forwardInput += 1.0f;
-		}
-		if (keys[GLFW_KEY_A])
-		{
-			// move left
-			horizontalInput -= 1.0f;
-		}
-		if (keys[GLFW_KEY_S])
-		{
-			// move backward
-			forwardInput -= 1.0f;
-		}
-		if (keys[GLFW_KEY_D])
-		{
-			// move right
-			horizontalInput += 1.0f;
+			float horizontalInput = 0.0f;
+			float forwardInput = 0.0f;
+			if (keys[GLFW_KEY_W])
+			{
+				// move forward
+				forwardInput += 1.0f;
+			}
+			if (keys[GLFW_KEY_A])
+			{
+				// move left
+				horizontalInput -= 1.0f;
+			}
+			if (keys[GLFW_KEY_S])
+			{
+				// move backward
+				forwardInput -= 1.0f;
+			}
+			if (keys[GLFW_KEY_D])
+			{
+				// move right
+				horizontalInput += 1.0f;
+			}
+			_player->velocity = ((horizontalInput != 0.0f || forwardInput != 0.0f)
+									 ? normalize(glm::vec3(horizontalInput, 0.0f, forwardInput))
+									 : glm::vec3(0.0f, 0.0f, 0.0f));
 		}
 
-		_player->velocity = ((horizontalInput != 0.0f || forwardInput != 0.0f)
-			                     ? normalize(glm::vec3(horizontalInput, 0.0f, forwardInput))
-			                     : glm::vec3(0.0f, 0.0f, 0.0f));
-
+		// FPS / TPS toggle
 		if (keys[GLFW_KEY_V] && !keysProcessed[GLFW_KEY_V])
 		{
 			keysProcessed[GLFW_KEY_V] = true;
-			switch (controller.cameraControl.mode)
+			switch (viewController.cameraControl.mode)
 			{
 			case ECameraMode::FPS:
-				controller.cameraControl.mode = ECameraMode::TPS;
+				viewController.cameraControl.mode = ECameraMode::TPS;
 				break;
 			case ECameraMode::TPS:
-				controller.cameraControl.mode = ECameraMode::FPS;
+				viewController.cameraControl.mode = ECameraMode::FPS;
 				break;
 			}
+		}
+
+		// Gun shooting
+		if (mouseButtons[GLFW_MOUSE_BUTTON_LEFT])
+		{
+			_player->gun.tryShoot();
+		}
+		if (keys[GLFW_KEY_R])
+		{
+			_player->gun.tryReload();
 		}
 	}
 }
@@ -117,9 +129,14 @@ void Game::update(const float dt)
 {
 	_player->move(dt);
 
-	controller.update(dt);
+	viewController.cameraControl.followingTarget = _player->transform.position;
+	viewController.update(dt);
 
-	collisions();
+	// Rotate player body yaw along camera direction
+	_player->transform.rotation = 
+		glm::quat(glm::vec3(0.0, glm::radians(viewController.cameraControl.yaw), 0.0f));
+
+	baseShader.setVec3("viewPos", viewController.cameraControl.eye);
 }
 
 void Game::render()
@@ -133,28 +150,36 @@ void Game::render()
 	//glEnable(GL_CULL_FACE); // Cull triangles which normal is not towards the camera
 
 	baseShader.use();
-	baseShader.setMat4("viewProj", gProjectionMatrix * gViewMatrix);
-	gAxesShader->use();
-	gAxesShader->setMat4("viewProj", gProjectionMatrix * gViewMatrix);
-	for (const auto& go : _gameObjects)
-	{
-		go->draw(baseShader);
-	}
+	baseShader.setMat4("view", gViewMatrix);
+	baseShader.setMat4("projection", gProjectionMatrix);
 
+	gAxesShader->use();
+	gAxesShader->setMat4("viewProj", gViewMatrix);
+	gAxesShader->setMat4("projection", gProjectionMatrix);
+
+	for (const auto& go : _gameObjects)
+		go->draw(baseShader);
+
+	drawUI();
 	if (Globals::debug)
 	{
 		drawDebugInfo();
 	}
 }
 
-void Game::collisions()
+void Game::drawUI()
 {
+	const auto width = static_cast<float>(viewController.cameraControl.width);
+	//const auto height = static_cast<float>(controller.cameraControl.height);
+
+	textRenderer.renderText(textShader, std::format("Ammo: {}", _player->gun.ammo),
+		width - 400.0f, 50.0f, 1.5f);
 }
 
 void Game::drawDebugInfo()
 {
 	//const auto width = static_cast<float>(controller.cameraControl.width);
-	const auto height = static_cast<float>(controller.cameraControl.height);
+	const auto height = static_cast<float>(viewController.cameraControl.height);
 
 	textRenderer.renderText(textShader, "Back To the CG",
 		0.0f, height - 50.0f, 1.0f);
