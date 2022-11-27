@@ -9,6 +9,7 @@
 #include "Player.hpp"
 #include "rendering/Shader.hpp"
 #include "rendering/Text.hpp"
+#include "rendering/Light.hpp"
 #include "Globals.hpp"
 
 inline glm::mat4 gViewMatrix;
@@ -33,6 +34,8 @@ public:
 	Shader baseShader;
 	Shader textShader;
 	Text textRenderer;
+
+	LightManager lightManager = LightManager();
 
 	Game(double firstX, double firstY, int width, int height);
 	~Game();

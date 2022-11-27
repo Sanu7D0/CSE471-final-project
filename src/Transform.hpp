@@ -25,4 +25,9 @@ struct Transform
 		model = glm::translate(model, position) * glm::mat4_cast(rotation) * glm::scale(model, scale); // T * R * S
 		return model;
 	}
+
+	[[nodiscard]] glm::vec3 forward() const
+	{
+		return rotation * glm::vec3(0.0f, 0.0f, 1.0f);
+	}
 };

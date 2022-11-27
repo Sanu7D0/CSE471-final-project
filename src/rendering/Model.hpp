@@ -129,7 +129,7 @@ private:
 
 	std::vector<Texture> loadMaterialTextures(const aiMaterial *material, aiTextureType type, const std::string &typeName)
 	{
-		std::cout << "Materials: " << material->GetTextureCount(type) << "\n";
+		std::cout << "Load material type: " << typeName << " " << material->GetTextureCount(type) << "\n";
 		std::vector<Texture> textures;
 		for (uint32_t i = 0; i < material->GetTextureCount(type); ++i)
 		{

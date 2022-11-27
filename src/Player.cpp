@@ -4,6 +4,16 @@ Player::Player(Transform t, Model model_) : GameObject(nullptr, t, std::move(mod
 {
 }
 
+void Player::update(const float dt)
+{
+	move(dt);
+	if (const auto _flashLight = flashLight.lock())
+	{
+		_flashLight->position = transform.position;
+		_flashLight->direction = transform.forward();
+	}
+}
+
 void Player::move(const float dt)
 {
 	if (glm::epsilonEqual(length(velocity), 0.0f, glm::epsilon<float>()))
@@ -15,3 +25,4 @@ void Player::move(const float dt)
 
 	transform.position += dt * _speed * (right * velocity.x + forward * velocity.z);
 }
+

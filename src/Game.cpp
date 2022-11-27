@@ -30,12 +30,12 @@ Game::~Game()
 void Game::init()
 {
 	_player = std::make_shared<Player>(
-		Transform(glm::vec3(0.0f, 0.0f, -5.0f)), 
+		Transform(glm::vec3(0.0f, 0.0f, -5.0f)),
 		Model("resource/model/gorilla.obj"));
 	_gameObjects.push_back(_player);
 
 	/*_gameObjects.push_back(std::make_shared<GameObject>(
-		nullptr, 
+		nullptr,
 		Transform(glm::vec3(0.0f, 0.0f, 0.0f)),
 		Model("resource/model/gorilla.obj")));*/
 	_gameObjects.push_back(std::make_shared<GameObject>(
@@ -44,10 +44,48 @@ void Game::init()
 		Model("resource/model/magma_block.obj")));
 	_gameObjects.push_back(std::make_shared<GameObject>(
 		nullptr,
-		Transform(glm::vec3(-5.0f, 1.0f, 0.0f)),
+		Transform(glm::vec3(0.0f, 0.0f, 3.0f)),
+		Model("resource/model/magma_block.obj")));
+	_gameObjects.push_back(std::make_shared<GameObject>(
+		nullptr,
+		Transform(glm::vec3(10.0f, -3.0f, 0.0f)),
 		Model("resource/model/magma_block.obj")));
 
-	baseShader.setVec3("lightPos", glm::vec3(0.0f, 0.0f, 0.0f));
+	lightManager.setDirLight(
+		{
+			{-0.2f, -1.0f, -0.3f},
+			{0.05f, 0.05f, 0.05f},
+			{0.4f, 0.4f, 0.4f},
+			{0.5f, 0.5f, 0.5f}
+		},
+		baseShader);
+	_player->flashLight = lightManager.addSpotLight(
+		{
+			_player->transform.position,
+			{0.0f, 0.0f, 1.0f},
+			{0.0f, 0.0f, 0.0f},
+			{1.0f, 1.0f, 1.0f},
+			{1.0f, 1.0f, 1.0f},
+			1.0f,
+			0.09f,
+			0.032f,
+			glm::cos(glm::radians(12.5f)),
+			glm::cos(glm::radians(15.0f))
+		},
+		baseShader
+	);
+	lightManager.addPointLight(
+		{
+			{0.0f, 0.0f, 0.0f},
+			{0.05f, 0.05f, 0.05f},
+			{0.8f, 0.8f, 0.8f},
+			{1.0f, 1.0f, 1.0f},
+			1.0f,
+			0.09f,
+			0.032f
+		},
+		baseShader
+	);
 }
 
 void Game::processInput(const float dt)
@@ -127,7 +165,7 @@ void Game::processInput(const float dt)
 
 void Game::update(const float dt)
 {
-	_player->move(dt);
+	_player->update(dt);
 
 	viewController.cameraControl.followingTarget = _player->transform.position;
 	viewController.update(dt);
@@ -136,7 +174,7 @@ void Game::update(const float dt)
 	_player->transform.rotation = 
 		glm::quat(glm::vec3(0.0, glm::radians(viewController.cameraControl.yaw), 0.0f));
 
-	baseShader.setVec3("viewPos", viewController.cameraControl.eye);
+	lightManager.update(baseShader);
 }
 
 void Game::render()
@@ -152,9 +190,10 @@ void Game::render()
 	baseShader.use();
 	baseShader.setMat4("view", gViewMatrix);
 	baseShader.setMat4("projection", gProjectionMatrix);
+	baseShader.setVec3("viewPos", viewController.cameraControl.eye);
 
 	gAxesShader->use();
-	gAxesShader->setMat4("viewProj", gViewMatrix);
+	gAxesShader->setMat4("view", gViewMatrix);
 	gAxesShader->setMat4("projection", gProjectionMatrix);
 
 	for (const auto& go : _gameObjects)
