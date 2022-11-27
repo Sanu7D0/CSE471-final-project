@@ -20,11 +20,13 @@ Game::Game(double firstX, double firstY, int width, int height)
 	textRenderer(static_cast<float>(width), static_cast<float>(height), "resource/font/DroidSansMono.ttf")
 {
 	InitAxesShader();
+	soundEngine = irrklang::createIrrKlangDevice();
 }
 
 Game::~Game()
 {
 	DeleteAxesShader();
+	delete soundEngine;
 }
 
 void Game::init()
