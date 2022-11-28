@@ -20,20 +20,21 @@ Game::Game(double firstX, double firstY, int width, int height)
 	textRenderer(static_cast<float>(width), static_cast<float>(height), "resource/font/DroidSansMono.ttf")
 {
 	InitAxesShader();
-	soundEngine = irrklang::createIrrKlangDevice();
+	//soundEngine = irrklang::createIrrKlangDevice();
 }
 
 Game::~Game()
 {
 	DeleteAxesShader();
-	delete soundEngine;
+	//delete soundEngine;
 }
 
 void Game::init()
 {
 	_player = std::make_shared<Player>(
 		Transform(glm::vec3(0.0f, 0.0f, -5.0f)),
-		Model("resource/model/gorilla.obj"));
+		Model("resource/model/gorilla.obj"),
+		Gun());
 	_gameObjects.push_back(_player);
 
 	/*_gameObjects.push_back(std::make_shared<GameObject>(
@@ -88,6 +89,8 @@ void Game::init()
 		},
 		baseShader
 	);
+
+	//soundEngine->play2D("resource/audio/Addict.mp3", true);
 }
 
 void Game::processInput(const float dt)

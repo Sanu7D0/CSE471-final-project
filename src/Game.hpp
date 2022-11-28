@@ -1,6 +1,6 @@
 #pragma once
 #include <glad/glad.h>
-#include <irrKlang/irrKlang.h>
+//#include <AL/al.h>
 
 #include <memory>
 #include <vector>
@@ -49,7 +49,7 @@ private:
 	std::shared_ptr<Player> _player;
 	std::vector<std::shared_ptr<GameObject>> _gameObjects;
 	LightManager lightManager = LightManager();
-	irrklang::ISoundEngine* soundEngine;
+	//irrklang::ISoundEngine* soundEngine;
 
 	void drawUI();
 	void drawDebugInfo();

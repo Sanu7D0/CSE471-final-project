@@ -1,7 +1,8 @@
 #pragma once
 #include <glm/glm.hpp>
 
-#include "Transform.hpp"
+#include "GameObject.hpp"
+#include "rendering/Model.hpp"
 
 enum EGunState
 {
@@ -16,12 +17,18 @@ public:
 	glm::vec3 shootPointOffset = glm::vec3(0.0f, 0.0f, 0.0f);
 
 	float damage = 10.0f;
-	double shootingCooltime = 0.1; // in seconds
-	uint32_t ammo;
+	double shootingCooltime = 0.2; // in seconds
+	uint32_t ammo = 2;
+	uint32_t magazineCapacity = 2;
 
 	EGunState state = EGunState::Idle;
 
-	Gun(uint32_t ammo);
+	std::string shotClips[2] = { "resource/audio/shotgun_shot_01.wav", "resource/audio/shotgun_shot_01.wav" };
+	std::string reloadClips[2] = { "resource/audio/shotgun_load_bullet_01.wav", "resource/audio/shotgun_load_bullet_02.wav" };
+	std::string cockClip = "resource/audio/shotgun_cock_02.wav";
+
+	//Gun(irrklang::ISoundEngine* soundEngine);
+	Gun();
 	bool tryShoot();
 	bool tryReload();
 

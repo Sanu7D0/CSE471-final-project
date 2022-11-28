@@ -1,18 +1,15 @@
 #pragma once
 #include <glm/glm.hpp>
-#include <memory>
-
-//#include "../GameObject.hpp"
 
 class BoxCollider
 {
 public:
-	//std::weak_ptr<GameObject> gameObject;
-	glm::vec3 center;
-	glm::vec3 size;
+	glm::vec3 min;
+	glm::vec3 max;
 
-
-	/*BoxCollider(const std::shared_ptr<GameObject>& gameObject, glm::vec3 center, glm::vec3 size)
-		: gameObject(gameObject), center(center), size(size)
-	{}*/
+	BoxCollider(glm::vec3 size)
+	{
+		min = -size / 2.0f;
+		max = size / 2.0f;
+	}
 };

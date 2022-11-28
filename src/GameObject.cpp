@@ -21,6 +21,21 @@ void GameObject::draw(const Shader& shader) const
 	}
 }
 
+void GameObject::draw(const Shader& shader, glm::mat4 parentTransform)
+{
+	const auto modelMat = parentTransform * transform.getModelMatrix();
+
+	shader.use();
+	shader.setMat4("model", modelMat);
+	shader.setMat4("model_inverse", glm::inverse(modelMat));
+
+	model.draw(shader);
+	if (Globals::debug) drawAxes();
+
+	for (const auto& child : children)
+		child->draw(shader, modelMat);
+}
+
 void GameObject::drawAxes() const
 {
 	gAxesShader->use();
@@ -34,4 +49,10 @@ void GameObject::drawAxes() const
 void GameObject::move(const float dt)
 {
 
+}
+
+void GameObject::addChild(const std::shared_ptr<GameObject>& child)
+{
+	children.push_back(child);
+	child->parent = shared_from_this();
 }

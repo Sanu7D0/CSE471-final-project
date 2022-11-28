@@ -10,10 +10,11 @@
 class Player : public GameObject
 {
 public:
-	Gun gun = Gun(10);
+	Gun gun;
 	std::weak_ptr<SpotLight> flashLight;
 
-	Player(Transform t, Model model_);
+	Player(Transform t, Model model_, Gun gun);
+	void draw(const Shader& shader) const override;
 	void update(const float dt);
 
 private:

@@ -2,14 +2,13 @@
 
 #include <ctime>
 #include <iostream>
-#include <chrono>
 #include <future>
 #include <thread>
 
 //#include "physics/Collider.hpp"
 //#include "physics/"
 
-Gun::Gun(uint32_t ammo) : ammo(ammo)
+Gun::Gun()
 {
 }
 
@@ -33,6 +32,8 @@ void Gun::shoot()
 
 	lastShootTime = static_cast<double>(std::clock());
 	ammo -= 1;
+
+	//soundEngine->play2D(shotClips[rand() % 2].c_str());
 }
 
 
@@ -51,7 +52,7 @@ bool Gun::tryReload()
 	//});
 
 	// thread is still synchronous...
-	ammo = 10;
+	asyncReload();
 	state = EGunState::Idle;
 
 	return true;
@@ -59,6 +60,12 @@ bool Gun::tryReload()
 
 void Gun::asyncReload()
 {
+	//for (int i = 0; i < magazineCapacity; ++i)
+	//{
+	//	soundEngine->play2D(reloadClips[rand() % 2].c_str());
+	//	// wait
+	//}
+	//soundEngine->play2D(cockClip.c_str());
 
-	ammo = 10;
+	ammo = magazineCapacity;
 }

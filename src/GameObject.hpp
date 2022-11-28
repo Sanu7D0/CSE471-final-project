@@ -49,7 +49,7 @@ inline void DeleteAxesShader()
 	delete gAxesShader;
 }
 
-class GameObject
+class GameObject : public std::enable_shared_from_this<GameObject>
 {
 public:
 	std::weak_ptr<GameObject> parent;
@@ -61,8 +61,11 @@ public:
 	GameObject(const std::shared_ptr<GameObject>& parent, Transform transform, Model model);
 
 	virtual void draw(const Shader& shader) const;
+	virtual void draw(const Shader& shader, glm::mat4 parentTransform);
 	void drawAxes() const;
 	virtual void move(const float dt);
+
+	void addChild(const std::shared_ptr<GameObject>& child);
 
 protected:
 	Model model;

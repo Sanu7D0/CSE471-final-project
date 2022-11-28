@@ -49,7 +49,7 @@ message(STATUS "Found ASSIMP in ${ASSIMP_INCLUDE_DIR}")
 
 set(LIBS ${GLFW3_LIBRARY} ${OPENGL_LIBRARY} ${CMAKE_DL_LIBS} ${ASSIMP_LIBRARY})
 
-set(LIBS ${LIBS} freetype irrKlang)
+set(LIBS ${LIBS} freetype OpenAL32)
 add_library(STB_IMAGE "src/stb_image.cpp")
 set(LIBS ${LIBS} STB_IMAGE)
 add_library(GLAD "src/glad.c")
