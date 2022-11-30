@@ -5,8 +5,7 @@
 #include <future>
 #include <thread>
 
-//#include "physics/Collider.hpp"
-//#include "physics/"
+#include "physics/Collision.hpp"
 
 Gun::Gun()
 {
@@ -29,6 +28,16 @@ void Gun::shoot()
 {
 	//BoxCollider& hitCollider = raycast();
 	//hitCollider.gameObject->
+
+	//const auto ray = Ray(transform.position, transform.forward());
+
+	//for (const auto& go : gameOjbects)
+	//{
+	//	if (intersect(go->collider, ray))
+	//	{
+	//		// do something
+	//	}
+	//}
 
 	lastShootTime = static_cast<double>(std::clock());
 	ammo -= 1;

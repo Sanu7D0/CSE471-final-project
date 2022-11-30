@@ -53,13 +53,21 @@ void Game::init()
 		nullptr,
 		Transform(glm::vec3(10.0f, -3.0f, 0.0f)),
 		Model("resource/model/magma_block.obj")));
+	_gameObjects.push_back(std::make_shared<GameObject>(
+		nullptr,
+		Transform(glm::vec3(10.0f, 0.0f, 5.0f)),
+		Model("resource/model/wall/wall.obj")));
+	_gameObjects.push_back(std::make_shared<GameObject>(
+		nullptr,
+		Transform(glm::vec3(0.0f, 0.0f, 5.0f)),
+		Model("resource/model/wall/wall.obj")));
 
 	lightManager.setDirLight(
 		{
 			{-0.2f, -1.0f, -0.3f},
-			{0.05f, 0.05f, 0.05f},
-			{0.4f, 0.4f, 0.4f},
-			{0.5f, 0.5f, 0.5f}
+			{0.01f, 0.01f, 0.01f},
+			{0.0f, 0.0f, 0.0f},
+			{0.0f, 0.0f, 0.0f}
 		},
 		baseShader);
 	_player->flashLight = lightManager.addSpotLight(
@@ -72,12 +80,12 @@ void Game::init()
 			1.0f,
 			0.09f,
 			0.032f,
-			glm::cos(glm::radians(12.5f)),
-			glm::cos(glm::radians(15.0f))
+			glm::cos(glm::radians(20.0f)),
+			glm::cos(glm::radians(30.0f))
 		},
 		baseShader
 	);
-	lightManager.addPointLight(
+	/*lightManager.addPointLight(
 		{
 			{0.0f, 0.0f, 0.0f},
 			{0.05f, 0.05f, 0.05f},
@@ -88,7 +96,7 @@ void Game::init()
 			0.032f
 		},
 		baseShader
-	);
+	);*/
 
 	//soundEngine->play2D("resource/audio/Addict.mp3", true);
 }
@@ -178,6 +186,16 @@ void Game::update(const float dt)
 	// Rotate player body yaw along camera direction
 	_player->transform.rotation = 
 		glm::quat(glm::vec3(0.0, glm::radians(viewController.cameraControl.yaw), 0.0f));
+	// Rotate flash light along camera direction
+	if (const auto flashLight = _player->flashLight.lock())
+	{
+		flashLight->direction =
+			glm::quat(glm::vec3(
+				glm::radians(viewController.cameraControl.pitch),
+				glm::radians(viewController.cameraControl.yaw),
+				0.0f))
+			* glm::vec3(0.0f, 0.0f, 1.0f);
+	}
 
 	lightManager.update(baseShader);
 }
@@ -203,6 +221,11 @@ void Game::render()
 
 	for (const auto& go : _gameObjects)
 		go->draw(baseShader);
+
+	/*terrainManager.skyboxShader.use();
+	terrainManager.skyboxShader.setMat4("view", gViewMatrix);
+	terrainManager.skyboxShader.setMat4("projection", gProjectionMatrix);
+	terrainManager.draw(baseShader);*/
 
 	drawUI();
 	if (Globals::debug)

@@ -46,11 +46,6 @@ void GameObject::drawAxes() const
 	glBindVertexArray(0);
 }
 
-void GameObject::move(const float dt)
-{
-
-}
-
 void GameObject::addChild(const std::shared_ptr<GameObject>& child)
 {
 	children.push_back(child);

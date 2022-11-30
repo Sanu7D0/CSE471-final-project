@@ -62,7 +62,8 @@ void ViewController::onFramebufferSizeCallback(unsigned int width, unsigned int 
 
 void ViewController::onCursorPositionCallback(double xpos, double ypos)
 {
-	const double dx = xpos - mouseControl.lastX;
+	//const double dx = xpos - mouseControl.lastX;
+	const double dx = mouseControl.lastX - xpos;
 	const double dy = ypos - mouseControl.lastY;
 	rotateCameraAlongMouse(static_cast<float>(dx), static_cast<float>(dy));
 

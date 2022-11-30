@@ -8,6 +8,7 @@
 #include "ViewController.hpp"
 #include "GameObject.hpp"
 #include "Player.hpp"
+#include "Terrain.hpp"
 #include "rendering/Shader.hpp"
 #include "rendering/Text.hpp"
 #include "rendering/Light.hpp"
@@ -49,6 +50,7 @@ private:
 	std::shared_ptr<Player> _player;
 	std::vector<std::shared_ptr<GameObject>> _gameObjects;
 	LightManager lightManager = LightManager();
+	TerrainManager terrainManager = TerrainManager();
 	//irrklang::ISoundEngine* soundEngine;
 
 	void drawUI();
