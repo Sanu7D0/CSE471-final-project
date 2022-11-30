@@ -1,9 +1,7 @@
 #pragma once
-#include "GameObject.hpp"
-
-#include <glad/glad.h>
 #include <glm/glm.hpp>
 
+#include "GameObject.hpp"
 #include "Shooting.hpp"
 #include "physics/RigidBody.hpp"
 #include "rendering/Light.hpp"

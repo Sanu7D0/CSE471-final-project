@@ -1,16 +1,20 @@
 #pragma once
 #include <glm/glm.hpp>
 
+#include <optional>
+
 #include "../Transform.hpp"
+#include "Collider.hpp"
 
 class RigidBody
 {
 public:
-	float speed = 1.0f;
 	glm::vec3 velocity = glm::vec3(0.0f, 0.0f, 0.0f);
+	float speed = 1.0f;
+	std::optional<BoxCollider> collider;
 
-	explicit RigidBody(Transform& transform)
-		: _transform(transform)
+	RigidBody(Transform& transform, const std::optional<BoxCollider> collider)
+		: collider(collider), _transform(transform)
 	{}
 	
 	void move(const float dt)

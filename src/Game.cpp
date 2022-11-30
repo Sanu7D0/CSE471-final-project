@@ -61,6 +61,10 @@ void Game::init()
 		nullptr,
 		Transform(glm::vec3(0.0f, 0.0f, 5.0f)),
 		Model("resource/model/wall/wall.obj")));
+	_gameObjects.push_back(std::make_shared<GameObject>(
+		nullptr,
+		Transform(glm::vec3(0.0f, -1.0f, 0.0f)),
+		Model("resource/model/floor/floor2.obj")));
 
 	lightManager.setDirLight(
 		{

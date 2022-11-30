@@ -1,11 +1,13 @@
 #include "Player.hpp"
 
+#include <optional>
+
 Player::Player(Transform t, Model model_, Gun gun)
 	: GameObject(nullptr, t, std::move(model_)),
-	RigidBody(transform),
+	RigidBody(transform, std::optional<BoxCollider>(std::nullopt)),
 	gun(std::move(gun))
 {
-	speed = 3.0f;
+	speed = 4.0f;
 }
 
 void Player::draw(const Shader& shader) const

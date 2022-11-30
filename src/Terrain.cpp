@@ -9,9 +9,10 @@ TerrainManager::TerrainManager()
 
 void TerrainManager::loadTerrain()
 {
+	// Ground
 }
 
-void TerrainManager::loadCubemap()
+/*void TerrainManager::loadCubemap()
 {
 	float skyboxVertices[] = {
 		-1.0f,  1.0f, -1.0f,
@@ -115,4 +116,4 @@ void TerrainManager::drawCubemap() const
 	glBindVertexArray(0);
 
 	glDepthFunc(GL_LESS); // set to default
-}
+}*/
