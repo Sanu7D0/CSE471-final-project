@@ -2,9 +2,11 @@
 #include <glm/glm.hpp>
 
 #include <atomic>
+#include <memory>
 
 #include "GameObject.hpp"
 #include "rendering/Model.hpp"
+#include "rendering/Light.hpp"
 
 enum EGunState
 {
@@ -25,6 +27,8 @@ public:
 
 	//std::atomic<EGunState> state = EGunState::Idle;
 	EGunState state = EGunState::Idle;
+
+	//std::shared_ptr<PointLight> muzzleFlash;
 
 	std::string shotClips[2] = { "resource/audio/shotgun_shot_01.wav", "resource/audio/shotgun_shot_01.wav" };
 	std::string reloadClips[2] = { "resource/audio/shotgun_load_bullet_01.wav", "resource/audio/shotgun_load_bullet_02.wav" };

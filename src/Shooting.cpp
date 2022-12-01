@@ -10,6 +10,7 @@
 
 Gun::Gun()
 {
+	//muzzleFlash = LightManager.
 }
 
 bool Gun::tryShoot()

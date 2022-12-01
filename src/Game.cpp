@@ -17,13 +17,7 @@ Game::Game(double firstX, double firstY, int width, int height)
 		  gProjectionMatrix),
 	  baseShader(Shader("resource/shader/Base.vert", "resource/shader/Base.frag")),
 	  textShader(Shader("resource/shader/Text.vert", "resource/shader/Text.frag")),
-	  textRenderer(static_cast<float>(width), static_cast<float>(height), "resource/font/DroidSansMono.ttf"),
-	  lightManager(DirLight(
-		               glm::vec3(0.01f, 0.01f, 0.01f),
-		               glm::vec3(0.0f, 0.0f, 0.0f),
-		               glm::vec3(0.0f, 0.0f, 0.0f),
-		               glm::vec3(-0.2f, -1.0f, -0.3f))
-	               , baseShader)
+	  textRenderer(static_cast<float>(width), static_cast<float>(height), "resource/font/DroidSansMono.ttf")
 {
 	InitAxesShader();
 	//soundEngine = irrklang::createIrrKlangDevice();
@@ -42,11 +36,7 @@ void Game::init()
 		Model("resource/model/gorilla.obj"),
 		Gun());
 	_gameObjects.push_back(_player);
-
-	/*_gameObjects.push_back(std::make_shared<GameObject>(
-		nullptr,
-		Transform(glm::vec3(0.0f, 0.0f, 0.0f)),
-		Model("resource/model/gorilla.obj")));*/
+	
 	_gameObjects.push_back(std::make_shared<GameObject>(
 		nullptr,
 		Transform(glm::vec3(5.0f, 3.0f, -5.0f)),
@@ -71,32 +61,26 @@ void Game::init()
 		nullptr,
 		Transform(glm::vec3(0.0f, -1.0f, 0.0f)),
 		Model("resource/model/floor/floor2.obj")));
+
+	LightManager::Instance()->setDirLight(DirLight(
+		glm::vec3(0.01f, 0.01f, 0.01f),
+		glm::vec3(0.0f, 0.0f, 0.0f),
+		glm::vec3(0.0f, 0.0f, 0.0f),
+		glm::vec3(-0.2f, -1.0f, -0.3f))
+		, baseShader);
 	
-	_player->flashLight = lightManager.addSpotLight(
+	_player->flashLight = LightManager::Instance()->addSpotLight(
 		SpotLight(
 			glm::vec3(0.0f, 0.0f, 0.0f),
 			glm::vec3(1.0f, 1.0f, 1.0f),
 			glm::vec3(0.7f, 0.7f, 0.7f),
 			_player->transform.position,
+			glm::vec3(0.0f, 0.0f, 1.0f),
 			1.0f, 0.09f, 0.032f,
 			glm::cos(glm::radians(20.0f)),
 			glm::cos(glm::radians(30.0f))),
 		baseShader
 	);
-	
-
-	/*lightManager.addPointLight(
-		{
-			{0.0f, 0.0f, 0.0f},
-			{0.05f, 0.05f, 0.05f},
-			{0.8f, 0.8f, 0.8f},
-			{1.0f, 1.0f, 1.0f},
-			1.0f,
-			0.09f,
-			0.032f
-		},
-		baseShader
-	);*/
 
 	//soundEngine->play2D("resource/audio/Addict.mp3", true);
 }
@@ -173,6 +157,16 @@ void Game::processInput(const float dt)
 		{
 			_player->gun.tryReload();
 		}
+
+		// Others
+		if (keys[GLFW_KEY_F] && !keysProcessed[GLFW_KEY_F])
+		{
+			keysProcessed[GLFW_KEY_F] = true;
+			if (const auto flashLight = _player->flashLight.lock(); flashLight != nullptr)
+			{
+				flashLight->bEnabled = !flashLight->bEnabled;
+			}
+		}
 	}
 }
 
@@ -197,7 +191,7 @@ void Game::update(const float dt)
 			* glm::vec3(0.0f, 0.0f, 1.0f);
 	}
 
-	lightManager.update(baseShader);
+	LightManager::Instance()->update(baseShader);
 }
 
 void Game::render()
