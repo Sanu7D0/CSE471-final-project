@@ -1,6 +1,8 @@
 #pragma once
 #include <glm/glm.hpp>
 
+#include <atomic>
+
 #include "GameObject.hpp"
 #include "rendering/Model.hpp"
 
@@ -21,6 +23,7 @@ public:
 	uint32_t ammo = 2;
 	uint32_t magazineCapacity = 2;
 
+	//std::atomic<EGunState> state = EGunState::Idle;
 	EGunState state = EGunState::Idle;
 
 	std::string shotClips[2] = { "resource/audio/shotgun_shot_01.wav", "resource/audio/shotgun_shot_01.wav" };
@@ -36,5 +39,4 @@ private:
 	double lastShootTime = 0.0;
 
 	void shoot();
-	void asyncReload();
 };

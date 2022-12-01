@@ -31,7 +31,7 @@ struct CameraControl
 	float pitch = 0.0f; // in degree
 
 	unsigned int width, height;
-	ECameraMode mode = ECameraMode::TPS;
+	ECameraMode mode = ECameraMode::FPS;
 
 	const float radius = 3.0f;
 	const float pitchMin = -89.0f; // in degree

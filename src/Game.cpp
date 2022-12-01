@@ -11,13 +11,19 @@
 
 Game::Game(double firstX, double firstY, int width, int height)
 	: viewController(
-		MouseControl(firstX, firstY),
-		CameraControl(glm::vec3(0.0f, 0.0f, -5.0f), width, height),
-		gViewMatrix,
-		gProjectionMatrix),
-	baseShader(Shader("resource/shader/Base.vert", "resource/shader/Base.frag")),
-	textShader(Shader("resource/shader/Text.vert", "resource/shader/Text.frag")),
-	textRenderer(static_cast<float>(width), static_cast<float>(height), "resource/font/DroidSansMono.ttf")
+		  MouseControl(firstX, firstY),
+		  CameraControl(glm::vec3(0.0f, 0.0f, -5.0f), width, height),
+		  gViewMatrix,
+		  gProjectionMatrix),
+	  baseShader(Shader("resource/shader/Base.vert", "resource/shader/Base.frag")),
+	  textShader(Shader("resource/shader/Text.vert", "resource/shader/Text.frag")),
+	  textRenderer(static_cast<float>(width), static_cast<float>(height), "resource/font/DroidSansMono.ttf"),
+	  lightManager(DirLight(
+		               glm::vec3(0.01f, 0.01f, 0.01f),
+		               glm::vec3(0.0f, 0.0f, 0.0f),
+		               glm::vec3(0.0f, 0.0f, 0.0f),
+		               glm::vec3(-0.2f, -1.0f, -0.3f))
+	               , baseShader)
 {
 	InitAxesShader();
 	//soundEngine = irrklang::createIrrKlangDevice();
@@ -65,30 +71,20 @@ void Game::init()
 		nullptr,
 		Transform(glm::vec3(0.0f, -1.0f, 0.0f)),
 		Model("resource/model/floor/floor2.obj")));
-
-	lightManager.setDirLight(
-		{
-			{-0.2f, -1.0f, -0.3f},
-			{0.01f, 0.01f, 0.01f},
-			{0.0f, 0.0f, 0.0f},
-			{0.0f, 0.0f, 0.0f}
-		},
-		baseShader);
+	
 	_player->flashLight = lightManager.addSpotLight(
-		{
+		SpotLight(
+			glm::vec3(0.0f, 0.0f, 0.0f),
+			glm::vec3(1.0f, 1.0f, 1.0f),
+			glm::vec3(0.7f, 0.7f, 0.7f),
 			_player->transform.position,
-			{0.0f, 0.0f, 1.0f},
-			{0.0f, 0.0f, 0.0f},
-			{1.0f, 1.0f, 1.0f},
-			{1.0f, 1.0f, 1.0f},
-			1.0f,
-			0.09f,
-			0.032f,
+			1.0f, 0.09f, 0.032f,
 			glm::cos(glm::radians(20.0f)),
-			glm::cos(glm::radians(30.0f))
-		},
+			glm::cos(glm::radians(30.0f))),
 		baseShader
 	);
+	
+
 	/*lightManager.addPointLight(
 		{
 			{0.0f, 0.0f, 0.0f},
@@ -124,7 +120,7 @@ void Game::processInput(const float dt)
 			Globals::debug = !Globals::debug;
 		}
 
-		// Player movement
+	// Player movement
 		{
 			float horizontalInput = 0.0f;
 			float forwardInput = 0.0f;
@@ -149,26 +145,26 @@ void Game::processInput(const float dt)
 				horizontalInput += 1.0f;
 			}
 			_player->velocity = ((horizontalInput != 0.0f || forwardInput != 0.0f)
-									 ? normalize(glm::vec3(horizontalInput, 0.0f, forwardInput))
-									 : glm::vec3(0.0f, 0.0f, 0.0f));
+				                     ? normalize(glm::vec3(horizontalInput, 0.0f, forwardInput))
+				                     : glm::vec3(0.0f, 0.0f, 0.0f));
 		}
 
-		// FPS / TPS toggle
+	// FPS / TPS toggle
 		if (keys[GLFW_KEY_V] && !keysProcessed[GLFW_KEY_V])
 		{
 			keysProcessed[GLFW_KEY_V] = true;
 			switch (viewController.cameraControl.mode)
 			{
-			case ECameraMode::FPS:
-				viewController.cameraControl.mode = ECameraMode::TPS;
+			case FPS:
+				viewController.cameraControl.mode = TPS;
 				break;
-			case ECameraMode::TPS:
-				viewController.cameraControl.mode = ECameraMode::FPS;
+			case TPS:
+				viewController.cameraControl.mode = FPS;
 				break;
 			}
 		}
 
-		// Gun shooting
+	// Gun shooting
 		if (mouseButtons[GLFW_MOUSE_BUTTON_LEFT])
 		{
 			_player->gun.tryShoot();
@@ -188,7 +184,7 @@ void Game::update(const float dt)
 	viewController.update(dt);
 
 	// Rotate player body yaw along camera direction
-	_player->transform.rotation = 
+	_player->transform.rotation =
 		glm::quat(glm::vec3(0.0, glm::radians(viewController.cameraControl.yaw), 0.0f));
 	// Rotate flash light along camera direction
 	if (const auto flashLight = _player->flashLight.lock())
@@ -244,7 +240,7 @@ void Game::drawUI()
 	//const auto height = static_cast<float>(controller.cameraControl.height);
 
 	textRenderer.renderText(textShader, std::format("Ammo: {}", _player->gun.ammo),
-		width - 400.0f, 50.0f, 1.5f);
+	                        width - 400.0f, 50.0f, 1.5f);
 }
 
 void Game::drawDebugInfo()
@@ -253,14 +249,14 @@ void Game::drawDebugInfo()
 	const auto height = static_cast<float>(viewController.cameraControl.height);
 
 	textRenderer.renderText(textShader, "Back To the CG",
-		0.0f, height - 50.0f, 1.0f);
+	                        0.0f, height - 50.0f, 1.0f);
 	textRenderer.renderText(textShader, std::format("{} fps", Globals::fps),
-		0.0f, height - 100.0f, 1.0f);
+	                        0.0f, height - 100.0f, 1.0f);
 
 	textRenderer.renderText(textShader, std::format("x: {:.2f}", _player->transform.position.x),
-		0.0f, height - 200.0f, 1.0f);
+	                        0.0f, height - 200.0f, 1.0f);
 	textRenderer.renderText(textShader, std::format("y: {:.2f}", _player->transform.position.y),
-		0.0f, height - 250.0f, 1.0f);
+	                        0.0f, height - 250.0f, 1.0f);
 	textRenderer.renderText(textShader, std::format("z: {:.2f}", _player->transform.position.z),
-		0.0f, height - 300.0f, 1.0f);
+	                        0.0f, height - 300.0f, 1.0f);
 }

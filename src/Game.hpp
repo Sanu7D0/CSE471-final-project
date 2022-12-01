@@ -49,7 +49,7 @@ public:
 private:
 	std::shared_ptr<Player> _player;
 	std::vector<std::shared_ptr<GameObject>> _gameObjects;
-	LightManager lightManager = LightManager();
+	LightManager lightManager;
 	TerrainManager terrainManager = TerrainManager();
 	//irrklang::ISoundEngine* soundEngine;
 

@@ -1,6 +1,8 @@
 #version 330 core
 
 struct DirLight {
+    bool enabled;
+
     vec3 direction;
 
     vec3 ambient;
@@ -9,6 +11,8 @@ struct DirLight {
 };
 
 struct PointLight {
+    bool enabled;
+
     vec3 position;
 
     vec3 ambient;
@@ -21,6 +25,8 @@ struct PointLight {
 };
 
 struct SpotLight {
+    bool enabled;
+
     vec3 position;
     vec3 direction;
 
@@ -66,9 +72,15 @@ void main()
     // Lights
     vec3 result = CalcDirLight(dirLight, norm, viewDir);
     for (int i = 0; i < pointLightCount; i++)
+    {
+        if (!pointLights[i].enabled) continue;
         result += CalcPointLight(pointLights[i], norm, FragPos, viewDir);
+    }
     for (int i = 0; i < spotLightCount; i++)
+    {
+        if (!spotLights[i].enabled) continue;
         result += CalcSpotLight(spotLights[i], norm, FragPos, viewDir);
+    }
     
     gl_FragColor = vec4(result, 1.0);
 }

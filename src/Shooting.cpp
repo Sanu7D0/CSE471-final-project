@@ -4,6 +4,7 @@
 #include <iostream>
 #include <future>
 #include <thread>
+#include <iostream>
 
 #include "physics/Collision.hpp"
 
@@ -39,6 +40,17 @@ void Gun::shoot()
 	//	}
 	//}
 
+	// Effect
+	std::thread muzzleFlash([]()
+	{
+		// enable muzzle light
+
+		// disable muzzle light
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
+
+	});
+	muzzleFlash.detach();
+
 	lastShootTime = static_cast<double>(std::clock());
 	ammo -= 1;
 
@@ -52,29 +64,14 @@ bool Gun::tryReload()
 		return false;
 
 	state = EGunState::Reloading;
-	//std::thread r([&ammo = ammo, &state = state]()
-	//{
-	//	std::this_thread::sleep_for(std::chrono::seconds(1)); // reload for 1 seconds
-
-	//	ammo = 10;
-	//	state = EGunState::Idle;
-	//});
-
-	// thread is still synchronous...
-	asyncReload();
-	state = EGunState::Idle;
+	std::thread reload([&ammo = ammo, &state = state]()
+	{
+		// TODO: mutex?
+		std::this_thread::sleep_for(std::chrono::milliseconds(700));
+		ammo = 2;
+		state = Idle;
+	});
+	reload.detach(); // Not to block when get out of scope
 
 	return true;
-}
-
-void Gun::asyncReload()
-{
-	//for (int i = 0; i < magazineCapacity; ++i)
-	//{
-	//	soundEngine->play2D(reloadClips[rand() % 2].c_str());
-	//	// wait
-	//}
-	//soundEngine->play2D(cockClip.c_str());
-
-	ammo = magazineCapacity;
 }
