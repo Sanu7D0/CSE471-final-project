@@ -16,7 +16,15 @@ public:
 	RigidBody(Transform& transform, const std::optional<BoxCollider> collider)
 		: collider(collider), _transform(transform)
 	{}
-	
+
+	void update(const float dt)
+	{
+		move(dt);
+	}
+
+private:
+	Transform& _transform;
+
 	void move(const float dt)
 	{
 		const auto forward = _transform.forward();
@@ -26,7 +34,4 @@ public:
 
 		_transform.position += dt * speed * (right * velocity.x + up * velocity.y + forward * velocity.z);
 	}
-
-private:
-	Transform& _transform;
 };

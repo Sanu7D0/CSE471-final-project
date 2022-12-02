@@ -31,44 +31,15 @@ Game::~Game()
 
 void Game::init()
 {
+	/*ResourceManager::LoadShader("base",
+		"resource/shader/Base.vert",
+		"resource/shader/Base.frag");*/
+
 	_player = std::make_shared<Player>(
 		Transform(glm::vec3(0.0f, 0.0f, -5.0f)),
-		Model("resource/model/gorilla.obj"),
-		Gun());
+		Model("resource/model/cyllinder.obj"));
 	_gameObjects.push_back(_player);
-	
-	_gameObjects.push_back(std::make_shared<GameObject>(
-		nullptr,
-		Transform(glm::vec3(5.0f, 3.0f, -5.0f)),
-		Model("resource/model/magma_block.obj")));
-	_gameObjects.push_back(std::make_shared<GameObject>(
-		nullptr,
-		Transform(glm::vec3(0.0f, 0.0f, 3.0f)),
-		Model("resource/model/magma_block.obj")));
-	_gameObjects.push_back(std::make_shared<GameObject>(
-		nullptr,
-		Transform(glm::vec3(10.0f, -3.0f, 0.0f)),
-		Model("resource/model/magma_block.obj")));
-	_gameObjects.push_back(std::make_shared<GameObject>(
-		nullptr,
-		Transform(glm::vec3(10.0f, 0.0f, 5.0f)),
-		Model("resource/model/wall/wall.obj")));
-	_gameObjects.push_back(std::make_shared<GameObject>(
-		nullptr,
-		Transform(glm::vec3(0.0f, 0.0f, 5.0f)),
-		Model("resource/model/wall/wall.obj")));
-	_gameObjects.push_back(std::make_shared<GameObject>(
-		nullptr,
-		Transform(glm::vec3(0.0f, -1.0f, 0.0f)),
-		Model("resource/model/floor/floor2.obj")));
 
-	LightManager::Instance()->setDirLight(DirLight(
-		glm::vec3(0.01f, 0.01f, 0.01f),
-		glm::vec3(0.0f, 0.0f, 0.0f),
-		glm::vec3(0.0f, 0.0f, 0.0f),
-		glm::vec3(-0.2f, -1.0f, -0.3f))
-		, baseShader);
-	
 	_player->flashLight = LightManager::Instance()->addSpotLight(
 		SpotLight(
 			glm::vec3(0.0f, 0.0f, 0.0f),
@@ -81,6 +52,33 @@ void Game::init()
 			glm::cos(glm::radians(30.0f))),
 		baseShader
 	);
+	_player->gun.muzzleFlash = LightManager::Instance()->addPointLight(
+		PointLight(
+			glm::vec3(0.0f, 0.0f, 0.0f),
+			glm::vec3(0.4f, 0.4f, 0.3f),
+			glm::vec3(0.0f, 0.0f, 0.0f),
+			_player->gun.transform.position,
+			1.0f, 0.09f, 0.032f
+		),
+		baseShader
+	);
+	_player->gun.muzzleFlash->bEnabled = false;
+
+	terrainManager.init();
+
+	LightManager::Instance()->setDirLight(DirLight(
+		glm::vec3(0.01f, 0.01f, 0.01f),
+		glm::vec3(0.0f, 0.0f, 0.0f),
+		glm::vec3(0.0f, 0.0f, 0.0f),
+		glm::vec3(-0.2f, -1.0f, -0.3f))
+		, baseShader);
+	LightManager::Instance()->addPointLight(PointLight(
+		glm::vec3(0.0f, 0.0f, 0.0f),
+		glm::vec3(0.5f, 0.5f, 0.5f),
+		glm::vec3(0.1f, 0.1f, 0.1f),
+		glm::vec3(2.0f, 0.5f, 3.0f),
+		1.0f, 0.09f, 0.032f)
+		, baseShader);
 
 	//soundEngine->play2D("resource/audio/Addict.mp3", true);
 }
@@ -202,7 +200,7 @@ void Game::render()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glEnable(GL_DEPTH_TEST);
-	//glEnable(GL_CULL_FACE); // Cull triangles which normal is not towards the camera
+	glEnable(GL_CULL_FACE); // Cull triangles which normal is not towards the camera
 
 	baseShader.use();
 	baseShader.setMat4("view", gViewMatrix);
@@ -215,11 +213,8 @@ void Game::render()
 
 	for (const auto& go : _gameObjects)
 		go->draw(baseShader);
-
-	/*terrainManager.skyboxShader.use();
-	terrainManager.skyboxShader.setMat4("view", gViewMatrix);
-	terrainManager.skyboxShader.setMat4("projection", gProjectionMatrix);
-	terrainManager.draw(baseShader);*/
+	
+	terrainManager.draw(baseShader);
 
 	drawUI();
 	if (Globals::debug)

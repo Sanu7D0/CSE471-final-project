@@ -4,13 +4,14 @@
 #include <iostream>
 #include <future>
 #include <thread>
+#include <utility>
 #include <iostream>
 
 #include "physics/Collision.hpp"
 
-Gun::Gun()
+Gun::Gun(const std::shared_ptr<GameObject>& parent, Transform transform, Model model)
+	: GameObject(parent, transform, std::move(model))
 {
-	//muzzleFlash = LightManager.
 }
 
 bool Gun::tryShoot()
@@ -42,15 +43,17 @@ void Gun::shoot()
 	//}
 
 	// Effect
-	std::thread muzzleFlash([]()
+	std::thread muzzleFlashEffect([&muzzleFlash = muzzleFlash]()
 	{
 		// enable muzzle light
+		muzzleFlash->bEnabled = true;
 
 		// disable muzzle light
-		std::this_thread::sleep_for(std::chrono::milliseconds(100));
+		std::this_thread::sleep_for(std::chrono::milliseconds(50));
+		muzzleFlash->bEnabled = false;
 
 	});
-	muzzleFlash.detach();
+	muzzleFlashEffect.detach();
 
 	lastShootTime = static_cast<double>(std::clock());
 	ammo -= 1;

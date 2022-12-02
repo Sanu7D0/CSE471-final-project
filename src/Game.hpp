@@ -10,9 +10,10 @@
 #include "Player.hpp"
 #include "Terrain.hpp"
 #include "rendering/Shader.hpp"
-#include "rendering/Text.hpp"
+#include "rendering/TextRenderer.hpp"
 #include "rendering/Light.hpp"
 #include "Globals.hpp"
+//#include "ResourceManger.hpp"
 
 inline glm::mat4 gViewMatrix;
 inline glm::mat4 gProjectionMatrix;
@@ -35,7 +36,7 @@ public:
 
 	Shader baseShader;
 	Shader textShader;
-	Text textRenderer;
+	TextRenderer textRenderer;
 
 
 	Game(double firstX, double firstY, int width, int height);

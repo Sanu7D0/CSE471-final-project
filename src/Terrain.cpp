@@ -1,16 +1,64 @@
 #include "Terrain.hpp"
 
+#include "rendering/Model.hpp"
+
+Terrain::Terrain(Transform transform, Model model, BoxCollider collider)
+	: GameObject(nullptr, transform, std::move(model)),
+	collider(collider)
+{
+}
+
 TerrainManager::TerrainManager()
-	: skyboxShader(Shader("resource/shader/Skybox.vert", "resource/shader/Skybox.frag"))
+	//: skyboxShader(Shader("resource/shader/Skybox.vert", "resource/shader/Skybox.frag"))
+{
+	//loadTerrain();
+	//loadCubemap();
+}
+
+void TerrainManager::init()
 {
 	loadTerrain();
-	//loadCubemap();
+}
+
+void TerrainManager::draw(const Shader& shader) const
+{
+	for (const auto& t : terrains)
+		t->draw(shader);
 }
 
 void TerrainManager::loadTerrain()
 {
-	// Ground
+	terrains.push_back(std::make_shared<Terrain>(
+		Transform(glm::vec3(5.0f, 3.0f, -5.0f)),
+		Model("resource/model/magma_block.obj"),
+		BoxCollider(glm::vec3(1.0f, 1.0f, 1.0f))
+		));
+	/*terrains.push_back(std::make_shared<Terrain>(
+		Transform(glm::vec3(0.0f, 0.0f, 3.0f)),
+		Model("resource/model/magma_block.obj")));
+	terrains.push_back(std::make_shared<Terrain>(
+		Transform(glm::vec3(10.0f, -3.0f, 0.0f)),
+		Model("resource/model/magma_block.obj")));
+	terrains.push_back(std::make_shared<Terrain>(
+		Transform(glm::vec3(10.0f, 0.0f, 5.0f)),
+		Model("resource/model/wall/wall.obj")));
+	terrains.push_back(std::make_shared<Terrain>(
+		Transform(glm::vec3(0.0f, 0.0f, 5.0f)),
+		Model("resource/model/wall/wall.obj")));
+	terrains.push_back(std::make_shared<Terrain>(
+		Transform(glm::vec3(0.0f, -1.0f, 0.0f)),
+		Model("resource/model/floor/floor2.obj")));
+	terrains.push_back(std::make_shared<Terrain>(
+		Transform(
+			glm::vec3(0.0f, 3.0f, 0.0f),
+			glm::quat(glm::vec3(glm::radians(180.0f), 0.0f, 0.0f)),
+			glm::vec3(1.0f, 1.0f, 1.0f)
+		),
+		Model("resource/model/floor/floor2.obj"))); // ceiling (upside down floor)
+	*/
 }
+
+
 
 /*void TerrainManager::loadCubemap()
 {

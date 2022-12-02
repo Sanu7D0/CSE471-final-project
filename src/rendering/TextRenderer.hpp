@@ -19,10 +19,10 @@ struct Character
 	uint32_t advance;
 };
 
-class Text
+class TextRenderer
 {
 public:
-	Text(float width, float height, const std::string& fontPath)
+	TextRenderer(float width, float height, const std::string& fontPath)
 		: _width(width), _height(height), _projection(glm::ortho(0.0f, _width, 0.0f, _height))
 	{
 		glGenVertexArrays(1, &VAO);
