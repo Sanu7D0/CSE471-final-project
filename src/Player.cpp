@@ -15,22 +15,12 @@ Player::Player(Transform t, Model model)
 	speed = 4.0f;
 }
 
-//void Player::draw(const Shader& shader, glm::mat4 parentTransform) const
-//{
-//	const auto modelMat = transform.getModelMatrix();
-//
-//	shader.use();
-//	shader.setMat4("model", modelMat);
-//	shader.setMat4("model_inverse", glm::inverse(modelMat));
-//
-//	model.draw(shader);
-//	gun.draw(shader, );
-//
-//	if (Globals::debug)
-//	{
-//		drawAxes();
-//	}
-//}
+void Player::draw(const Shader& shader) const
+{
+	GameObject::draw(shader);
+
+	//gun.draw(shader, transform.getModelMatrix());
+}
 
 void Player::update(const float dt)
 {

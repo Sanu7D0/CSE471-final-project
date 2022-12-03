@@ -13,6 +13,6 @@ public:
 	std::weak_ptr<SpotLight> flashLight;
 
 	Player(Transform t, Model model);
-	//void draw(const Shader& shader, glm::mat4 parentTransform) const override;
+	void draw(const Shader& shader) const override;
 	void update(const float dt) override;
 };
