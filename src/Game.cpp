@@ -9,6 +9,8 @@
 #include <string>
 #include <format>
 
+#include "Enemy.hpp"
+
 Game::Game(double firstX, double firstY, int width, int height)
 	: viewController(
 		  MouseControl(firstX, firstY),
@@ -63,6 +65,8 @@ void Game::init()
 		baseShader
 	);
 	_player->gun.muzzleFlash->bEnabled = false;
+
+	// TODO: add enenmies
 
 	terrainManager.init();
 
@@ -216,6 +220,9 @@ void Game::render()
 
 	for (const auto& go : _gameObjects)
 		go->draw(baseShader);
+
+	for (const auto enemy : EnemyContainer::Instance()->getContainer())
+		enemy->draw(baseShader);
 	
 	terrainManager.draw(baseShader);
 

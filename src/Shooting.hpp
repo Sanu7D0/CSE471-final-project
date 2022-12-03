@@ -19,7 +19,7 @@ class Gun : public GameObject
 public:
 	glm::vec3 shootPointOffset = glm::vec3(0.0f, 0.0f, 0.0f);
 
-	float damage = 10.0f;
+	float damage = 30.0f;
 	double shootingCooltime = 0.2; // in seconds
 	uint32_t ammo = 2;
 	uint32_t magazineCapacity = 2;

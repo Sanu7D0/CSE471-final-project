@@ -6,7 +6,9 @@
 #include <thread>
 #include <utility>
 #include <iostream>
+#include <algorithm>
 
+#include "Enemy.hpp"
 #include "physics/Collision.hpp"
 
 Gun::Gun(const std::shared_ptr<GameObject>& parent, Transform transform, Model model)
@@ -34,13 +36,29 @@ void Gun::shoot()
 
 	const auto ray = Ray(transform.position, transform.forward());
 
-	for (const auto& enemy : enemies)
+	// Find all hit enemy with ray
+	std::vector<Enemy*> hitEnemies;
+	for (const auto enemy : EnemyContainer::Instance()->getContainer())
 	{
 		if (intersect(enemy->collider, ray))
 		{
-			// do something
+			hitEnemies.push_back(enemy);
 		}
 	}
+
+	if (hitEnemies.size() > 0)
+	{
+		// Find nearest hit enemy
+		std::ranges::sort(hitEnemies,
+          [&transform = transform](const Enemy* a, const Enemy* b) -> bool
+          {
+              return distance(transform.position, a->transform.position) < distance(
+                  transform.position, b->transform.position);
+          });
+
+		hitEnemies[0]->takeDamage(damage);
+	}
+
 
 	// Effect
 	std::thread muzzleFlashEffect([&muzzleFlash = muzzleFlash]()
