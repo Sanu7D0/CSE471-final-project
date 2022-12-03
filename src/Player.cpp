@@ -18,6 +18,7 @@ Player::Player(Transform t, Model model)
 void Player::draw(const Shader& shader) const
 {
 	GameObject::draw(shader);
+	gun.draw(shader);
 
 	//gun.draw(shader, transform.getModelMatrix());
 }
@@ -25,7 +26,11 @@ void Player::draw(const Shader& shader) const
 void Player::update(const float dt)
 {
 	RigidBody::update(dt);
-	gun.update(dt);
+
+	// TODO: hierachy
+	gun.transform.position = transform.position;
+	gun.transform.rotation = transform.rotation;
+
 
 	if (const auto _flashLight = flashLight.lock())
 	{

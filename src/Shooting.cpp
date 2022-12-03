@@ -34,9 +34,6 @@ bool Gun::tryShoot()
 
 void Gun::shoot()
 {
-	//BoxCollider& hitCollider = raycast();
-	//hitCollider.gameObject->
-
 	const auto ray = Ray(transform.position, transform.forward());
 
 	// Find all hit enemy with ray
@@ -91,8 +88,11 @@ bool Gun::tryReload()
 	state = EGunState::Reloading;
 	std::thread reload([&ammo = ammo, &state = state]()
 	{
-		// TODO: mutex?
-		std::this_thread::sleep_for(std::chrono::milliseconds(700));
+		SoundEngine->play2D("resource/audio/shotgun_load_bullet_01.wav");
+		std::this_thread::sleep_for(std::chrono::milliseconds(500));
+		SoundEngine->play2D("resource/audio/shotgun_load_bullet_02.wav");
+		std::this_thread::sleep_for(std::chrono::milliseconds(500));
+		SoundEngine->play2D("resource/audio/shotgun_cock_01.wav");
 		ammo = 2;
 		state = Idle;
 	});

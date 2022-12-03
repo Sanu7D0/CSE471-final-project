@@ -80,13 +80,13 @@ void Game::init()
 		glm::vec3(0.0f, 0.0f, 0.0f),
 		glm::vec3(-0.2f, -1.0f, -0.3f))
 		, baseShader);
-	LightManager::Instance()->addPointLight(PointLight(
+	/*LightManager::Instance()->addPointLight(PointLight(
 		glm::vec3(0.0f, 0.0f, 0.0f),
 		glm::vec3(0.5f, 0.5f, 0.5f),
 		glm::vec3(0.1f, 0.1f, 0.1f),
 		glm::vec3(2.0f, 0.5f, 3.0f),
 		1.0f, 0.09f, 0.032f)
-		, baseShader);
+		, baseShader);*/
 
 	//soundEngine->play2D("resource/audio/Addict.mp3", true);
 }

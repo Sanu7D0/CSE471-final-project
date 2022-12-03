@@ -6,7 +6,7 @@ EnemyContainer* EnemyContainer::_instance = nullptr;
 
 Enemy::Enemy(Transform transform, Model model)
 	: GameObject(nullptr, transform, std::move(model)),
-	RigidBody(this->transform, BoxCollider(glm::vec3(2.1f, 2.1f, 2.1f)))
+	RigidBody(this->transform, BoxCollider(glm::vec3(2.5f, 2.5f, 2.5f)))
 {
 	speed = 2.0f;
 }
