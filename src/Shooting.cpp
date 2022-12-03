@@ -32,15 +32,15 @@ void Gun::shoot()
 	//BoxCollider& hitCollider = raycast();
 	//hitCollider.gameObject->
 
-	//const auto ray = Ray(transform.position, transform.forward());
+	const auto ray = Ray(transform.position, transform.forward());
 
-	//for (const auto& go : gameOjbects)
-	//{
-	//	if (intersect(go->collider, ray))
-	//	{
-	//		// do something
-	//	}
-	//}
+	for (const auto& enemy : enemies)
+	{
+		if (intersect(enemy->collider, ray))
+		{
+			// do something
+		}
+	}
 
 	// Effect
 	std::thread muzzleFlashEffect([&muzzleFlash = muzzleFlash]()
