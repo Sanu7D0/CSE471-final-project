@@ -15,9 +15,9 @@ Game::Game(double firstX, double firstY, int width, int height)
 		  CameraControl(glm::vec3(0.0f, 0.0f, -5.0f), width, height),
 		  gViewMatrix,
 		  gProjectionMatrix),
-	  baseShader(Shader("resource/shader/Base.vert", "resource/shader/Base.frag")),
-	  textShader(Shader("resource/shader/Text.vert", "resource/shader/Text.frag")),
-	  textRenderer(static_cast<float>(width), static_cast<float>(height), "resource/font/DroidSansMono.ttf")
+	baseShader(Shader("resource/shader/Base.vert", "resource/shader/Base.frag")),
+	textShader(Shader("resource/shader/Text.vert", "resource/shader/Text.frag")),
+	textRenderer(static_cast<float>(width), static_cast<float>(height), "resource/font/DroidSansMono.ttf")
 {
 	InitAxesShader();
 	//soundEngine = irrklang::createIrrKlangDevice();
@@ -201,6 +201,8 @@ void Game::render()
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE); // Cull triangles which normal is not towards the camera
+
+	//const auto& a = ResourceManager::GetShader("base");
 
 	baseShader.use();
 	baseShader.setMat4("view", gViewMatrix);
