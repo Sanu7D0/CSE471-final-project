@@ -15,6 +15,7 @@ public:
 	glm::vec3 targetPosition;
 	BoxCollider collider = BoxCollider(glm::vec3(1.0f, 1.0f, 1.0f));
 	void update(const float dt) override;
+	void draw(const Shader& shader) const override;
 	void takeDamage(float damage);
 };
 
