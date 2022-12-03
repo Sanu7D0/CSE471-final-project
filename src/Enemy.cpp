@@ -15,11 +15,11 @@ void Enemy::update(const float dt)
 {
 	const glm::vec3 chaseDir = normalize(targetPosition - transform.position);
 
-	const auto forward = glm::vec3(0.0f, 0.0f, 1.0f);
+	/*const auto forward = glm::vec3(0.0f, 0.0f, 1.0f);
 	const float theta = glm::acos(glm::dot(chaseDir, forward) / (glm::length(chaseDir) * glm::length(forward)));
 	transform.rotation = glm::quat(glm::vec3(0.0f, theta, 0.0f)) * forward;
 
-	transform.position += chaseDir * speed * dt;
+	transform.position += chaseDir * speed * dt;*/
 
 	//RigidBody::update(dt);
 }

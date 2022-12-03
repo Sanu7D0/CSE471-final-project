@@ -68,8 +68,11 @@ void Game::init()
 
 	// TODO: add enenmies
 	auto* enemy1 = new Enemy(
-		Transform(glm::vec3(0.0f, 0.0f, 1.0f)),
-		Model("resource/model/magma_block.obj"));
+		Transform(
+			glm::vec3(0.0f, 0.0f, 5.0f),
+			glm::quat(glm::vec3(0.0f, 0.0f, 0.0f)),
+			glm::vec3(0.7f, 0.7f, 0.7f)),
+		Model("resource/model/enemy/thomas2.obj"));
 	EnemyContainer::Instance()->addEnemy(enemy1);
 
 	terrainManager.init();
