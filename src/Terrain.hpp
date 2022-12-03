@@ -18,6 +18,8 @@ public:
 	BoxCollider collider;
 
 	Terrain(Transform transform, Model model, BoxCollider collider);
+
+	void draw(const Shader& shader) const override;
 };
 
 class TerrainManager
