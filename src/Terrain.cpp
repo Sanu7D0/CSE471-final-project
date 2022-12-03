@@ -50,7 +50,7 @@ void TerrainManager::loadTerrain()
 			glm::quat(glm::vec3(glm::radians(0.0f), glm::radians(90.0f), 0.0f)),
 			glm::vec3(3.0f, 5.0f, 1.0f)),
 		Model("resource/model/wall/wall.obj"),
-		BoxCollider(glm::vec3(1.0f, 1.0f, 1.0f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
+		BoxCollider(glm::vec3(1.0f, 1.0f, 17.2f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
 		));
 	//ÀÛÀº º® (Àº½ÅÃ³ º®)
 	terrains.push_back(std::make_shared<Terrain>(
@@ -59,7 +59,7 @@ void TerrainManager::loadTerrain()
 			glm::quat(glm::vec3(glm::radians(0.0f), glm::radians(90.0f), 0.0f)),
 			glm::vec3(3.0f, 5.0f, 1.0f)),
 		Model("resource/model/wall/wall.obj"),
-		BoxCollider(glm::vec3(1.0f, 1.0f, 1.0f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
+		BoxCollider(glm::vec3(1.0f, 6.0f, 17.2f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
 		));
 	// ÀÛÀº º® (Àº½ÅÃ³ º®)
 	terrains.push_back(std::make_shared<Terrain>(
@@ -68,7 +68,7 @@ void TerrainManager::loadTerrain()
 			glm::quat(glm::vec3(glm::radians(0.0f), 0.0f, 0.0f)),
 			glm::vec3(3.0f, 5.0f, 1.0f)),
 		Model("resource/model/wall/wall.obj"),
-		BoxCollider(glm::vec3(1.0f, 1.0f, 1.0f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
+		BoxCollider(glm::vec3(17.2f, 6.0f, 1.0f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
 		));
 	//ÀÛÀº º® (Àº½ÅÃ³ º®)
 	terrains.push_back(std::make_shared<Terrain>(
@@ -77,13 +77,13 @@ void TerrainManager::loadTerrain()
 			glm::quat(glm::vec3(glm::radians(0.0f), 0.0f, 0.0f)),
 			glm::vec3(3.0f, 5.0f, 1.0f)),
 		Model("resource/model/wall/wall.obj"),
-		BoxCollider(glm::vec3(1.0f, 1.0f, 1.0f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
+		BoxCollider(glm::vec3(17.2f, 6.0f, 1.0f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
 		));
 	// ÀÛÀº º® (Àº½ÅÃ³ º®)
 	terrains.push_back(std::make_shared<Terrain>(
 		Transform(glm::vec3(0.0f, -1.0f, 0.0f)),
 		Model("resource/model/floor/floor2.obj"),
-		BoxCollider(glm::vec3(1.0f, 1.0f, 1.0f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
+		BoxCollider(glm::vec3(200.0f, 6.0f, 200.0f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
 		));
 	// ¹Ù´Ú
 	terrains.push_back(std::make_shared<Terrain>(
@@ -93,7 +93,7 @@ void TerrainManager::loadTerrain()
 			glm::vec3(1.0f, 1.0f, 1.0f)
 		),
 		Model("resource/model/floor/floor2.obj"), // ceiling (upside down floor)
-		BoxCollider(glm::vec3(1.0f, 1.0f, 1.0f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
+		BoxCollider(glm::vec3(200.0f, 1.0f, 200.0f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
 		));
 	// ÃµÀå
 	terrains.push_back(std::make_shared<Terrain>(
@@ -103,7 +103,7 @@ void TerrainManager::loadTerrain()
 			glm::vec3(1.0f, 1.0f, 1.0f)
 		),
 		Model("resource/model/floor/floor2.obj"), // ceiling (upside down floor)
-		BoxCollider(glm::vec3(1.0f, 1.0f, 1.0f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
+		BoxCollider(glm::vec3(100.0f, 6.0f, 1.0f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
 		));
 	// ÁÂÃø º®
 	terrains.push_back(std::make_shared<Terrain>(
@@ -113,7 +113,7 @@ void TerrainManager::loadTerrain()
 			glm::vec3(1.0f, 1.0f, 1.0f)
 		),
 		Model("resource/model/floor/floor2.obj"), // ceiling (upside down floor)
-		BoxCollider(glm::vec3(1.0f, 1.0f, 1.0f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
+		BoxCollider(glm::vec3(100.0f, 6.0f, 1.0f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
 		));
 	//¿ìÃø º®
 	terrains.push_back(std::make_shared<Terrain>(
@@ -123,7 +123,7 @@ void TerrainManager::loadTerrain()
 			glm::vec3(1.0f, 1.0f, 1.0f)
 		),
 		Model("resource/model/floor/floor2.obj"), // ceiling (upside down floor)
-		BoxCollider(glm::vec3(1.0f, 1.0f, 1.0f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
+		BoxCollider(glm::vec3(1.0f, 6.0f, 100.0f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
 		));
 	//¾ÕÂÊ º®
 	terrains.push_back(std::make_shared<Terrain>(
@@ -133,7 +133,7 @@ void TerrainManager::loadTerrain()
 			glm::vec3(1.0f, 1.0f, 1.0f)
 		),
 		Model("resource/model/floor/floor2.obj"), // ceiling (upside down floor)
-		BoxCollider(glm::vec3(1.0f, 1.0f, 1.0f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
+		BoxCollider(glm::vec3(1.0f, 6.0f, 100.0f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
 		));
 	//µÚÂÊ º®
 	terrains.push_back(std::make_shared<Terrain>(
@@ -142,7 +142,7 @@ void TerrainManager::loadTerrain()
 			glm::quat(glm::vec3(glm::radians(0.0f), glm::radians(90.0f), 0.0f)),
 			glm::vec3(6.99f, 5.0f, 1.0f)),
 		Model("resource/model/wall/wall.obj"),
-		BoxCollider(glm::vec3(1.0f, 1.0f, 1.0f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
+		BoxCollider(glm::vec3(1.0f, 6.0f, 40.0f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
 		));
 
 	terrains.push_back(std::make_shared<Terrain>(
@@ -151,7 +151,7 @@ void TerrainManager::loadTerrain()
 			glm::quat(glm::vec3(glm::radians(0.0f), glm::radians(90.0f), 0.0f)),
 			glm::vec3(6.99f, 5.0f, 1.0f)),
 		Model("resource/model/wall/wall.obj"),
-		BoxCollider(glm::vec3(1.0f, 1.0f, 1.0f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
+		BoxCollider(glm::vec3(1.0f, 6.0f, 40.0f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
 		));
 	terrains.push_back(std::make_shared<Terrain>(
 		Transform(
@@ -159,7 +159,7 @@ void TerrainManager::loadTerrain()
 			glm::quat(glm::vec3(glm::radians(0.0f), glm::radians(90.0f), 0.0f)),
 			glm::vec3(6.99f, 5.0f, 1.0f)),
 		Model("resource/model/wall/wall.obj"),
-		BoxCollider(glm::vec3(1.0f, 1.0f, 1.0f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
+		BoxCollider(glm::vec3(1.0f, 6.0f, 40.0f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
 		));
 	terrains.push_back(std::make_shared<Terrain>(
 		Transform(
@@ -167,7 +167,7 @@ void TerrainManager::loadTerrain()
 			glm::quat(glm::vec3(glm::radians(0.0f), glm::radians(90.0f), 0.0f)),
 			glm::vec3(6.99f, 5.0f, 1.0f)),
 		Model("resource/model/wall/wall.obj"),
-		BoxCollider(glm::vec3(1.0f, 1.0f, 1.0f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
+		BoxCollider(glm::vec3(1.0f, 6.0f, 40.0f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
 		));
 	terrains.push_back(std::make_shared<Terrain>(
 		Transform(
@@ -175,7 +175,7 @@ void TerrainManager::loadTerrain()
 			glm::quat(glm::vec3(glm::radians(0.0f), glm::radians(0.0f), 0.0f)),
 			glm::vec3(6.99f, 5.0f, 1.0f)),
 		Model("resource/model/wall/wall.obj"),
-		BoxCollider(glm::vec3(1.0f, 1.0f, 1.0f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
+		BoxCollider(glm::vec3(40.0f, 6.0f, 1.0f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
 		));
 	terrains.push_back(std::make_shared<Terrain>(
 		Transform(
@@ -183,7 +183,7 @@ void TerrainManager::loadTerrain()
 			glm::quat(glm::vec3(glm::radians(0.0f), glm::radians(0.0f), 0.0f)),
 			glm::vec3(6.99f, 5.0f, 1.0f)),
 		Model("resource/model/wall/wall.obj"),
-		BoxCollider(glm::vec3(1.0f, 1.0f, 1.0f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
+		BoxCollider(glm::vec3(40.0f, 6.0f, 1.0f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
 		));
 	terrains.push_back(std::make_shared<Terrain>(
 		Transform(
@@ -191,7 +191,7 @@ void TerrainManager::loadTerrain()
 			glm::quat(glm::vec3(glm::radians(0.0f), glm::radians(0.0f), 0.0f)),
 			glm::vec3(6.99f, 5.0f, 1.0f)),
 		Model("resource/model/wall/wall.obj"),
-		BoxCollider(glm::vec3(1.0f, 1.0f, 1.0f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
+		BoxCollider(glm::vec3(40.0f, 6.0f, 1.0f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
 		));
 	terrains.push_back(std::make_shared<Terrain>(
 		Transform(
@@ -199,7 +199,7 @@ void TerrainManager::loadTerrain()
 			glm::quat(glm::vec3(glm::radians(0.0f), glm::radians(0.0f), 0.0f)),
 			glm::vec3(6.99f, 5.0f, 1.0f)),
 		Model("resource/model/wall/wall.obj"),
-		BoxCollider(glm::vec3(1.0f, 1.0f, 1.0f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
+		BoxCollider(glm::vec3(40.0f, 6.0f, 1.0f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
 		));
 	terrains.push_back(std::make_shared<Terrain>(
 		Transform(
@@ -207,7 +207,7 @@ void TerrainManager::loadTerrain()
 			glm::quat(glm::vec3(glm::radians(0.0f), glm::radians(0.0f), 0.0f)),
 			glm::vec3(0.5f, 5.0f, 0.3f)),
 		Model("resource/model/wall/wall_new.obj"),
-		BoxCollider(glm::vec3(1.0f, 1.0f, 1.0f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
+		BoxCollider(glm::vec3(10.0f, 6.0f, 0.6f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
 		));
 	terrains.push_back(std::make_shared<Terrain>(
 		Transform(
@@ -215,7 +215,7 @@ void TerrainManager::loadTerrain()
 			glm::quat(glm::vec3(glm::radians(0.0f), glm::radians(0.0f), 0.0f)),
 			glm::vec3(0.5f, 5.0f, 0.5f)),
 		Model("resource/model/wall/wall_new.obj"),
-		BoxCollider(glm::vec3(1.0f, 1.0f, 1.0f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
+		BoxCollider(glm::vec3(10.0f, 6.0f, 0.6f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
 		));
 	terrains.push_back(std::make_shared<Terrain>(
 		Transform(
@@ -223,7 +223,7 @@ void TerrainManager::loadTerrain()
 			glm::quat(glm::vec3(glm::radians(0.0f), glm::radians(90.0f), 0.0f)),
 			glm::vec3(0.5f, 5.0f, 0.3f)),
 		Model("resource/model/wall/wall_new.obj"),
-		BoxCollider(glm::vec3(1.0f, 1.0f, 1.0f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
+		BoxCollider(glm::vec3(0.6f, 6.0f, 10.0f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
 		));
 	terrains.push_back(std::make_shared<Terrain>(
 		Transform(
@@ -231,7 +231,7 @@ void TerrainManager::loadTerrain()
 			glm::quat(glm::vec3(glm::radians(0.0f), glm::radians(90.0f), 0.0f)),
 			glm::vec3(0.5f, 5.0f, 0.3f)),
 		Model("resource/model/wall/wall_new.obj"),
-		BoxCollider(glm::vec3(1.0f, 1.0f, 1.0f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
+		BoxCollider(glm::vec3(0.6f, 6.0f, 10.0f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
 		));
 	// -----------------------------------------------
 	terrains.push_back(std::make_shared<Terrain>(
@@ -240,7 +240,7 @@ void TerrainManager::loadTerrain()
 			glm::quat(glm::vec3(glm::radians(0.0f), glm::radians(0.0f), 0.0f)),
 			glm::vec3(0.5f, 5.0f, 0.3f)),
 		Model("resource/model/wall/wall_new.obj"),
-		BoxCollider(glm::vec3(1.0f, 1.0f, 1.0f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
+		BoxCollider(glm::vec3(10.0f, 6.0f, 0.6f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
 		));
 	terrains.push_back(std::make_shared<Terrain>(
 		Transform(
@@ -248,7 +248,7 @@ void TerrainManager::loadTerrain()
 			glm::quat(glm::vec3(glm::radians(0.0f), glm::radians(0.0f), 0.0f)),
 			glm::vec3(0.5f, 5.0f, 0.5f)),
 		Model("resource/model/wall/wall_new.obj"),
-		BoxCollider(glm::vec3(1.0f, 1.0f, 1.0f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
+		BoxCollider(glm::vec3(10.0f, 6.0f, 0.6f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
 		));
 	terrains.push_back(std::make_shared<Terrain>(
 		Transform(
@@ -256,7 +256,7 @@ void TerrainManager::loadTerrain()
 			glm::quat(glm::vec3(glm::radians(0.0f), glm::radians(90.0f), 0.0f)),
 			glm::vec3(0.5f, 5.0f, 0.3f)),
 		Model("resource/model/wall/wall_new.obj"),
-		BoxCollider(glm::vec3(1.0f, 1.0f, 1.0f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
+		BoxCollider(glm::vec3(0.6f, 6.0f, 10.0f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
 		));
 	terrains.push_back(std::make_shared<Terrain>(
 		Transform(
@@ -264,7 +264,7 @@ void TerrainManager::loadTerrain()
 			glm::quat(glm::vec3(glm::radians(0.0f), glm::radians(90.0f), 0.0f)),
 			glm::vec3(0.5f, 5.0f, 0.3f)),
 		Model("resource/model/wall/wall_new.obj"),
-		BoxCollider(glm::vec3(1.0f, 1.0f, 1.0f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
+		BoxCollider(glm::vec3(0.6f, 6.0f, 10.0f))   // Á÷À°¸éÃ¼ heat_box (x,y,z)
 		));
 }
 
