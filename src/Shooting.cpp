@@ -7,9 +7,12 @@
 #include <utility>
 #include <iostream>
 #include <algorithm>
-
+#include <irrklang/irrKlang.h>
 #include "Enemy.hpp"
 #include "physics/Collision.hpp"
+using namespace irrklang;
+
+ISoundEngine* SoundEngine = createIrrKlangDevice();
 
 Gun::Gun(const std::shared_ptr<GameObject>& parent, Transform transform, Model model)
 	: GameObject(parent, transform, std::move(model))
@@ -76,7 +79,7 @@ void Gun::shoot()
 	lastShootTime = static_cast<double>(std::clock());
 	ammo -= 1;
 
-	//soundEngine->play2D(shotClips[rand() % 2].c_str());
+	SoundEngine->play2D("resource/audio/shotgun_shot_01.wav", false);
 }
 
 
