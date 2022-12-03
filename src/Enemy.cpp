@@ -10,7 +10,7 @@ Enemy::Enemy(Transform transform, Model model)
 		this->transform, 
 		BoxCollider(glm::vec3(2.5f, 2.5f, 2.5f), transform.position))
 {
-	speed = 1.0f;
+	speed = 2.0f;
 }
 
 void Enemy::update(const float dt)
@@ -18,14 +18,18 @@ void Enemy::update(const float dt)
 	collider.center = transform.position;
 
 	// Player chasing
-	const glm::vec3 chaseDir = normalize(targetPosition - transform.position);
+	// direction to rotation
+	// https://stackoverflow.com/questions/18558910/direction-vector-to-rotation-matrix
+	const auto forward = normalize(targetPosition - transform.position);
+	const auto right = cross(forward, glm::vec3(0.0f, -1.0f, 0.0f));
+	const auto up = cross(forward, right);
+	auto mat = glm::mat3(1.0f);
+	mat[0] = right;
+	mat[1] = up;
+	mat[2] = forward;
 
-	const auto forward = glm::vec3(0.0f, 0.0f, 1.0f);
-	const float theta = glm::acos(glm::dot(chaseDir, forward) / (glm::length(chaseDir) * glm::length(forward)));
-	//transform.rotation = glm::quat(glm::vec3(0.0f, theta, 0.0f)) * forward;
-	transform.rotation = glm::quat(chaseDir, glm::vec3(0.0f, 0.0f, 1.0f));
-
-	transform.position += chaseDir * speed * dt;
+	transform.position += forward * speed * dt;
+	transform.rotation = glm::quat_cast(mat);
 
 	//RigidBody::update(dt);
 }

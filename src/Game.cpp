@@ -9,6 +9,7 @@
 #include <string>
 #include <format>
 #include <ctime>
+#include <cstdlib>
 
 #include "Enemy.hpp"
 
@@ -27,7 +28,7 @@ public:
 		lastSpawnTime = currentTime;
 		auto* enemy = new Enemy(
 			Transform(
-				glm::vec3(0.0f, 0.0f, 5.0f),
+				glm::vec3(rand() % 10, 0.0f, rand() % 10),
 				glm::quat(glm::vec3(0.0f, 0.0f, 0.0f)),
 				glm::vec3(0.7f, 0.7f, 0.7f)),
 			Model("resource/model/enemy/thomas2.obj"));
@@ -91,6 +92,14 @@ void Game::init()
 		baseShader
 	);
 	_player->gun.muzzleFlash->bEnabled = false;
+
+	auto* enemy = new Enemy(
+		Transform(
+			glm::vec3(0.0f, 0.0f, 3.0f),
+			glm::quat(glm::vec3(0.0f, 0.0f, 0.0f)),
+			glm::vec3(0.7f, 0.7f, 0.7f)),
+		Model("resource/model/enemy/thomas2.obj"));
+	EnemyContainer::Instance()->addEnemy(enemy);
 
 	terrainManager.init();
 

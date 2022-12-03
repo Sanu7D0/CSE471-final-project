@@ -13,7 +13,7 @@ public:
 
 	float hp = 10.0f;
 	glm::vec3 targetPosition;
-	BoxCollider collider = BoxCollider(glm::vec3(1.0f, 1.0f, 1.0f));
+	BoxCollider collider = BoxCollider(glm::vec3(2.0f, 2.0f, 5.0f));
 	void update(const float dt) override;
 	void draw(const Shader& shader) const override;
 	void takeDamage(float damage);
