@@ -9,6 +9,8 @@
 class Enemy : public GameObject, public RigidBody
 {
 public:
+	Enemy(Transform transform, Model model);
+
 	float hp = 10.0f;
 	glm::vec3 targetPosition;
 	BoxCollider collider = BoxCollider(glm::vec3(1.0f, 1.0f, 1.0f));

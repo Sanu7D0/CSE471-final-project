@@ -67,6 +67,10 @@ void Game::init()
 	_player->gun.muzzleFlash->bEnabled = false;
 
 	// TODO: add enenmies
+	auto* enemy1 = new Enemy(
+		Transform(glm::vec3(0.0f, 0.0f, 1.0f)),
+		Model("resource/model/magma_block.obj"));
+	EnemyContainer::Instance()->addEnemy(enemy1);
 
 	terrainManager.init();
 
@@ -192,6 +196,12 @@ void Game::update(const float dt)
 				glm::radians(viewController.cameraControl.yaw),
 				0.0f))
 			* glm::vec3(0.0f, 0.0f, 1.0f);
+	}
+
+	for (const auto enemy : EnemyContainer::Instance()->getContainer())
+	{
+		enemy->targetPosition = _player->transform.position;
+		enemy->update(dt);
 	}
 
 	LightManager::Instance()->update(baseShader);
