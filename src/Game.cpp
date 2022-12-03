@@ -8,8 +8,34 @@
 #include <iostream>
 #include <string>
 #include <format>
+#include <ctime>
 
 #include "Enemy.hpp"
+
+class EnemySpawner
+{
+	double lastSpawnTime = 0.0;
+	double spawnDuration = 5.0;
+
+public:
+	void SpawnEnemy()
+	{
+		const auto currentTime = static_cast<double>(std::clock());
+		if ((currentTime - lastSpawnTime) / CLOCKS_PER_SEC < spawnDuration)
+			return;
+
+		lastSpawnTime = currentTime;
+		auto* enemy = new Enemy(
+			Transform(
+				glm::vec3(0.0f, 0.0f, 5.0f),
+				glm::quat(glm::vec3(0.0f, 0.0f, 0.0f)),
+				glm::vec3(0.7f, 0.7f, 0.7f)),
+			Model("resource/model/enemy/thomas2.obj"));
+		EnemyContainer::Instance()->addEnemy(enemy);
+	}
+};
+
+EnemySpawner enemySpawner = EnemySpawner();
 
 Game::Game(double firstX, double firstY, int width, int height)
 	: viewController(
@@ -65,15 +91,6 @@ void Game::init()
 		baseShader
 	);
 	_player->gun.muzzleFlash->bEnabled = false;
-
-	// TODO: add enenmies
-	auto* enemy1 = new Enemy(
-		Transform(
-			glm::vec3(0.0f, 0.0f, 5.0f),
-			glm::quat(glm::vec3(0.0f, 0.0f, 0.0f)),
-			glm::vec3(0.7f, 0.7f, 0.7f)),
-		Model("resource/model/enemy/thomas2.obj"));
-	EnemyContainer::Instance()->addEnemy(enemy1);
 
 	terrainManager.init();
 
@@ -201,6 +218,8 @@ void Game::update(const float dt)
 			* glm::vec3(0.0f, 0.0f, 1.0f);
 	}
 
+	// Enemies
+	enemySpawner.SpawnEnemy();
 	for (const auto enemy : EnemyContainer::Instance()->getContainer())
 	{
 		enemy->targetPosition = _player->transform.position;

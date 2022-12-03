@@ -8,11 +8,12 @@
 class BoxCollider
 {
 public:
+	glm::vec3 center;
 	glm::vec3 min;
 	glm::vec3 max;
 
-	explicit BoxCollider(glm::vec3 size)
-		: min(-size / 2.0f), max(size / 2.0f)
+	explicit BoxCollider(glm::vec3 size, glm::vec3 center = glm::vec3(0.0f, 0.0f, 0.0f))
+		: min(-size / 2.0f), max(size / 2.0f), center(center)
 	{
 		const float vertices[48] =
 		{

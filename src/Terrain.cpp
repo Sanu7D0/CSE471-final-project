@@ -6,6 +6,7 @@ Terrain::Terrain(Transform transform, Model model, BoxCollider collider)
 	: GameObject(nullptr, transform, std::move(model)),
 	collider(collider)
 {
+	collider.center = transform.position;
 }
 
 void Terrain::draw(const Shader& shader) const

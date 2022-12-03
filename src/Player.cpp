@@ -30,6 +30,7 @@ void Player::update(const float dt)
 	// TODO: hierachy
 	gun.transform.position = transform.position;
 	gun.transform.rotation = transform.rotation;
+	gun.muzzleFlash->position = gun.transform.position;
 
 
 	if (const auto _flashLight = flashLight.lock())
