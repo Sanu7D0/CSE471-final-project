@@ -106,6 +106,7 @@ void Game::processInput(const float dt)
 		{
 			float horizontalInput = 0.0f;
 			float forwardInput = 0.0f;
+			float yinput = 0.0f;
 			if (keys[GLFW_KEY_W])
 			{
 				// move forward
