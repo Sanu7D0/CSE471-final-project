@@ -33,8 +33,8 @@ void Player::draw(const Shader& shader) const
 void Player::update(const float dt)
 {
 	
-	RigidBody::update(dt);
 	collider.center = transform.position;
+	RigidBody::update(dt);
 
 	// TODO: hierachy
 	

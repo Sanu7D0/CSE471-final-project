@@ -40,11 +40,11 @@ private:
 		_transform.position += dt * speed * (right * velocity.x + up * velocity.y + forward * velocity.z);
 		for (const auto& wall : TerrainContainer::Instance()->getContainer())
 		{
-			if (aabb(collider, (wall.collider))) {
+			if (aabb(collider, (wall->collider))) {
 				_transform.position = temp;
 			}
 		}
-		i/*f (aabb(collider, BoxCollider(glm::vec3(5.8f, 2.0f, 0.5f), glm::vec3(-8.6f, -0.9f, -30.0f)))) {
+		/*f (aabb(collider, BoxCollider(glm::vec3(5.8f, 2.0f, 0.5f), glm::vec3(-8.6f, -0.9f, -30.0f)))) {
 			_transform.position = temp;
 
 		}*/
