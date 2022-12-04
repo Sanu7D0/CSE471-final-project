@@ -13,6 +13,8 @@
 
 #include "Enemy.hpp"
 
+
+
 class EnemySpawner
 {
 	double lastSpawnTime = 0.0;
@@ -98,7 +100,7 @@ void Game::init()
 		glm::vec3(-0.2f, -1.0f, -0.3f))
 		, baseShader);
 
-	//soundEngine->play2D("resource/audio/Addict.mp3", true);
+	Globals::SoundEngine->play2D("resource/audio/bgm.mp3", true);
 }
 
 void Game::processInput(const float dt)
