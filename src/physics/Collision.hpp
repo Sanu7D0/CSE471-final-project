@@ -51,7 +51,7 @@ static bool aabb(const BoxCollider& a, const BoxCollider& b) {
 	const auto amax = a.max + a.center;
 	const auto bmin = b.min + b.center;
 	const auto bmax = b.max + b.center;
-	if (bmin.x <= amax.x && bmax.x >= amin.x && bmin.z <= amax.z && bmax.z >= amin.z) {
+	if (bmin.x < amax.x && bmax.x > amin.x && bmin.z < amax.z && bmax.z > amin.z) {
 		return true;
 	}
 	return false;

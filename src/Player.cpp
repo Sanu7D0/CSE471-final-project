@@ -34,6 +34,7 @@ void Player::update(const float dt)
 {
 	
 	collider.center = transform.position;
+	RigidBody::collider.center = transform.position;
 	RigidBody::update(dt);
 
 	// TODO: hierachy
