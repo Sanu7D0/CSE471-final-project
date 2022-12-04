@@ -52,7 +52,7 @@ private:
 	std::vector<std::shared_ptr<GameObject>> _gameObjects;
 	TerrainManager terrainManager = TerrainManager();
 	//irrklang::ISoundEngine* soundEngine;
-
+	double lastplayTime = 0.0;
 	void drawUI();
 	void drawDebugInfo();
 };

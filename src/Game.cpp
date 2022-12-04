@@ -52,7 +52,7 @@ Game::Game(double firstX, double firstY, int width, int height)
 	baseShader(Shader("resource/shader/Base.vert", "resource/shader/Base.frag")),
 	textShader(Shader("resource/shader/Text.vert", "resource/shader/Text.frag")),
 	textRenderer(static_cast<float>(width), static_cast<float>(height), "resource/font/DroidSansMono.ttf")
-{
+{	
 	InitAxesShader();
 	//soundEngine = irrklang::createIrrKlangDevice();
 }
@@ -102,7 +102,7 @@ void Game::init()
 		glm::vec3(0.0f, 0.0f, 0.0f),
 		glm::vec3(-0.2f, -1.0f, -0.3f))
 		, baseShader);
-
+	float soundcontrol = 0;
 	Globals::SoundEngine->play2D("resource/audio/bgm.mp3", true);
 }
 
@@ -134,25 +134,43 @@ void Game::processInput(const float dt)
 			{
 				// move forward
 				forwardInput += 1.0f;
+
 			}
 			if (keys[GLFW_KEY_A])
 			{
 				// move left
 				horizontalInput -= 1.0f;
+
+					
 			}
 			if (keys[GLFW_KEY_S])
 			{
 				// move backward
 				forwardInput -= 1.0f;
+
 			}
 			if (keys[GLFW_KEY_D])
 			{
 				// move right
 				horizontalInput += 1.0f;
+
 			}
-			_player->rigidBody.velocity = ((horizontalInput != 0.0f || forwardInput != 0.0f)
-				                     ? normalize(glm::vec3(horizontalInput, 0.0f, forwardInput))
-				                     : glm::vec3(0.0f, 0.0f, 0.0f));
+
+			if (horizontalInput != 0.0f || forwardInput != 0.0f)
+			{
+				_player->rigidBody.velocity = normalize(glm::vec3(horizontalInput, 0.0f, forwardInput));
+				const auto currentTime = static_cast<double>(std::clock());
+				if ((currentTime - lastplayTime) / CLOCKS_PER_SEC > 1.0f)
+				{
+					Globals::SoundEngine->play2D("resource/audio/footsteps.mp3", false);
+					lastplayTime = std::clock();
+				}
+
+			}
+			else
+			{
+				_player->rigidBody.velocity = glm::vec3(0.0f, 0.0f, 0.0f);
+			}
 		}
 
 	// FPS / TPS toggle

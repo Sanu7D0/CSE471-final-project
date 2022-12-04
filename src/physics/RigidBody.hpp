@@ -38,7 +38,7 @@ private:
 		//BoxCollider a = BoxCollider(glm::vec3(5.0f, 1.0f, 5.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 		const auto temp = _transform.position;
 
-		_transform.position += dt * speed * (right * velocity.x + up * velocity.y + forward * velocity.z);
+		_transform.position += 5*dt * speed * (right * velocity.x + up * velocity.y + forward * velocity.z);
 		collider.center = _transform.position;
 
 		for (const auto& wall : TerrainContainer::Instance()->getContainer())
