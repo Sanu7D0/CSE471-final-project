@@ -4,7 +4,7 @@
 
 Player::Player(Transform t, Model model)
 	: GameObject(nullptr, t, std::move(model)),
-	RigidBody(transform, BoxCollider(glm::vec3(4.0f, 4.0f, 4.0f), collider.center)),
+	RigidBody(transform, collider),
 	gun(Gun(
 		nullptr,
 		Transform(glm::vec3(0.0f, 0.0f, 0.0f)),
