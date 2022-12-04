@@ -66,7 +66,7 @@ void Game::init()
 
 	_player = std::make_shared<Player>(
 		Transform(glm::vec3(0.0f, 0.0f, -5.0f)),
-		Model("resource/model/cyllinder.obj"));
+		Model("resource/model/magma_block.obj"));
 	_gameObjects.push_back(_player);
 
 	_player->flashLight = LightManager::Instance()->addSpotLight(

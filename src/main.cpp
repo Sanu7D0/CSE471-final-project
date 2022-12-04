@@ -15,7 +15,6 @@ static void CursorPositionCallback(GLFWwindow* window, double xpos, double ypos)
 static void FramebufferSizeCallback(GLFWwindow* window, int width, int height);
 
 bool init(GLFWwindow*& window);
-void initLight();
 
 int main(int argc, char* argv[])
 {
@@ -84,8 +83,6 @@ bool init(GLFWwindow*& window)
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glViewport(0, 0, mode->width, mode->height);
 
-	initLight();
-
 	double firstX, firstY;
 	glfwGetCursorPos(window, &firstX, &firstY);
 
@@ -93,11 +90,6 @@ bool init(GLFWwindow*& window)
 	gGame->init();
 
 	return true;
-}
-
-void initLight()
-{
-	// TODO
 }
 
 static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode)

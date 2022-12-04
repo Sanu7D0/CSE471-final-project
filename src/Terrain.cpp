@@ -37,22 +37,6 @@ void TerrainManager::draw(const Shader& shader) const
 
 void TerrainManager::loadTerrain()
 {
-	terrains.push_back(std::make_shared<Terrain>( // make_shared -> new
-		Transform(glm::vec3(5.0f, 3.0f, -5.0f)),  // ��ġ, ȸ��, ������,(����)
-		Model("resource/model/magma_block.obj"),
-		BoxCollider(glm::vec3(2.0f, 2.0f, 2.0f))   // ������ü heat_box (x,y,z)
-		));
-	/*terrains.push_back(std::make_shared<Terrain>(
-		Transform(glm::vec3(0.0f, 0.0f, 3.0f)),
-		Model("resource/model/magma_block.obj"),
-		BoxCollider(glm::vec3(1.0f, 1.0f, 1.0f))// ������ü heat_box (x,y,z)
-		));
-	terrains.push_back(std::make_shared<Terrain>(
-		Transform(glm::vec3(10.0f, -3.0f, 0.0f)),
-		Model("resource/model/magma_block.obj"),
-		BoxCollider(glm::vec3(1.0f, 1.0f, 1.0f))   // ������ü heat_box (x,y,z)
-		));
-		*/
 	terrains.push_back(std::make_shared<Terrain>(
 		Transform(
 			glm::vec3(10.0f, -0.9f, 0.0f),

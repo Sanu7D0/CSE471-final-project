@@ -17,6 +17,37 @@ ISoundEngine* SoundEngine = createIrrKlangDevice();
 Gun::Gun(const std::shared_ptr<GameObject>& parent, Transform transform, Model model)
 	: GameObject(parent, transform, std::move(model))
 {
+	float laserVertices[6] =
+	{
+		0.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 5.0f
+	};
+
+	glGenVertexArrays(1, &laserVAO);
+	glGenBuffers(1, &laserVBO);
+	glBindVertexArray(laserVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, laserVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(laserVertices), &laserVertices[0], GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glBindVertexArray(0);
+}
+
+void Gun::draw(const Shader& shader) const
+{
+	GameObject::draw(shader);
+
+	if (Globals::debug)
+	{
+		// Draw laser pointer
+		gAxesShader->use();
+		gAxesShader->setMat4("model", transform.getModelMatrix());
+		gAxesShader->setVec3("color", glm::vec3(1.0f, 0.0f, 1.0f)); // purple
+
+		glBindVertexArray(laserVAO);
+		glDrawArrays(GL_LINES, 0, 2);
+		glBindVertexArray(0);
+	}
 }
 
 bool Gun::tryShoot()

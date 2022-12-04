@@ -10,7 +10,7 @@ Enemy::Enemy(Transform transform, Model model)
 		this->transform, 
 		BoxCollider(glm::vec3(2.5f, 2.5f, 2.5f), transform.position))
 {
-	speed = 2.0f;
+	speed = 2.5f;
 }
 
 void Enemy::update(const float dt)

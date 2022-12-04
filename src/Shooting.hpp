@@ -34,11 +34,13 @@ public:
 	std::string cockClip = "resource/audio/shotgun_cock_02.wav";
 
 	Gun(const std::shared_ptr<GameObject>& parent, Transform transform, Model model);
+	void draw(const Shader& shader) const override;
 	bool tryShoot();
 	bool tryReload();
 
 private:
 	double lastShootTime = 0.0;
+	GLuint laserVAO, laserVBO;
 
 	void shoot();
 };
