@@ -28,7 +28,7 @@ public:
 		lastSpawnTime = currentTime;
 		auto* enemy = new Enemy(
 			Transform(
-				glm::vec3(rand() % 10, 0.0f, rand() % 10),
+				glm::vec3(rand() % 20, 0.0f, rand() % 20),
 				glm::quat(glm::vec3(0.0f, 0.0f, 0.0f)),
 				glm::vec3(0.7f, 0.7f, 0.7f)),
 			Model("resource/model/enemy/thomas2.obj"));
@@ -60,13 +60,9 @@ Game::~Game()
 
 void Game::init()
 {
-	/*ResourceManager::LoadShader("base",
-		"resource/shader/Base.vert",
-		"resource/shader/Base.frag");*/
-
 	_player = std::make_shared<Player>(
 		Transform(glm::vec3(0.0f, 0.0f, -5.0f)),
-		Model("resource/model/cyllinder.obj"));
+		Model("resource/model/magma_block.obj"));
 	_gameObjects.push_back(_player);
 
 	_player->flashLight = LightManager::Instance()->addSpotLight(
@@ -93,14 +89,6 @@ void Game::init()
 	);
 	_player->gun.muzzleFlash->bEnabled = false;
 
-	auto* enemy = new Enemy(
-		Transform(
-			glm::vec3(0.0f, 0.0f, 3.0f),
-			glm::quat(glm::vec3(0.0f, 0.0f, 0.0f)),
-			glm::vec3(0.7f, 0.7f, 0.7f)),
-		Model("resource/model/enemy/thomas2.obj"));
-	EnemyContainer::Instance()->addEnemy(enemy);
-
 	terrainManager.init();
 
 	LightManager::Instance()->setDirLight(DirLight(
@@ -109,13 +97,6 @@ void Game::init()
 		glm::vec3(0.0f, 0.0f, 0.0f),
 		glm::vec3(-0.2f, -1.0f, -0.3f))
 		, baseShader);
-	/*LightManager::Instance()->addPointLight(PointLight(
-		glm::vec3(0.0f, 0.0f, 0.0f),
-		glm::vec3(0.5f, 0.5f, 0.5f),
-		glm::vec3(0.1f, 0.1f, 0.1f),
-		glm::vec3(2.0f, 0.5f, 3.0f),
-		1.0f, 0.09f, 0.032f)
-		, baseShader);*/
 
 	//soundEngine->play2D("resource/audio/Addict.mp3", true);
 }
@@ -247,8 +228,6 @@ void Game::render()
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE); // Cull triangles which normal is not towards the camera
-
-	//const auto& a = ResourceManager::GetShader("base");
 
 	baseShader.use();
 	baseShader.setMat4("view", gViewMatrix);

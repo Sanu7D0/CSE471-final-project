@@ -1,0 +1,14 @@
+# Blender 3.3.1 MTL File: 'Triple_Barrel_Shotgun.blend'
+# www.blender.org
+
+newmtl tripleshotgun
+Ka 1.000000 1.000000 1.000000
+Ks 0.800000 0.800000 0.800000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd TRIPLE_SHOTGUN_TEXTURES/tripleshotgun_Base_Color.jpg
+map_Ns TRIPLE_SHOTGUN_TEXTURES/tripleshotgun_Roughness.jpg
+map_refl TRIPLE_SHOTGUN_TEXTURES/tripleshotgun_Metallic.jpg
+map_Bump -bm 1.000000 TRIPLE_SHOTGUN_TEXTURES/tripleshotgun_Normal_OpenGL.jpg

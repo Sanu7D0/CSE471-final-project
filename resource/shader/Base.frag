@@ -59,6 +59,7 @@ uniform PointLight pointLights[16];
 uniform SpotLight spotLights[16];
 uniform int pointLightCount = 0;
 uniform int spotLightCount = 0;
+uniform vec3 defaultAmbient = vec3(0.0, 0.0, 0.0);
 
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir);
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
@@ -81,6 +82,7 @@ void main()
         if (!spotLights[i].enabled) continue;
         result += CalcSpotLight(spotLights[i], norm, FragPos, viewDir);
     }
+    result += defaultAmbient * vec3(texture(texture_diffuse1, TexCoord));
     
     gl_FragColor = vec4(result, 1.0);
 }

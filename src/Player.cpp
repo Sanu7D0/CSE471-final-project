@@ -7,8 +7,8 @@ Player::Player(Transform t, Model model)
 	RigidBody(transform, BoxCollider(glm::vec3(4.0f, 4.0f, 4.0f), collider.center)),
 	gun(Gun(
 		nullptr,
-		Transform(glm::vec3(0.0f, 0.0f, 0.0f)), // TODO: set with gun offset
-		Model("resource/model/stick.obj")
+		Transform(glm::vec3(0.0f, 0.0f, 0.0f)),
+		Model("resource/model/shotgun/shotgun3.obj")
 	))
 {
 	addChild(gun);
@@ -17,10 +17,16 @@ Player::Player(Transform t, Model model)
 
 void Player::draw(const Shader& shader) const
 {
+	shader.use();
+	shader.setVec3("defaultAmbient", glm::vec3(0.3f, 0.3f, 0.3f));
+
 	GameObject::draw(shader);
 	gun.draw(shader);
-	if (Globals::debug)
-		collider.draw(gAxesShader, transform.getModelMatrix());
+
+	shader.use();
+	shader.setVec3("defaultAmbient", glm::vec3(0.0f, 0.0f, 0.0f));
+
+
 	//gun.draw(shader, transform.getModelMatrix());
 }
 
