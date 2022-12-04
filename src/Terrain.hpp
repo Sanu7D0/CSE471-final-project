@@ -27,7 +27,7 @@ class TerrainManager
 {
 public:
 	//Shader skyboxShader;
-	std::vector<std::shared_ptr<Terrain>> terrains;
+	std::list<std::shared_ptr<Terrain>> terrains; // no collision
 
 	TerrainManager();
 
@@ -46,7 +46,7 @@ class TerrainContainer
 {
 private:
 	static TerrainContainer* _instance;
-	std::list<Terrain*> enemies;
+	std::list<std::shared_ptr<Terrain>> terrains;
 
 	TerrainContainer() {};
 	~TerrainContainer() {};
@@ -60,19 +60,18 @@ public:
 		return _instance;
 	}
 
-	const std::list<Terrain*>& getContainer()
+	const std::list<std::shared_ptr<Terrain>>& getContainer()
 	{
-		return enemies;
+		return terrains;
 	}
 
-	void addEnemy(Terrain* enemy)
+	void addTerrain(const std::shared_ptr<Terrain>& terrain)
 	{
-		enemies.push_back(enemy);
+		terrains.push_back(terrain);
 	}
 
-	void removeEnemy(Terrain* enemy)
+	void removeTerrain(const std::shared_ptr<Terrain>& terrain)
 	{
-		enemies.remove(enemy);
-		delete enemy;
+		terrains.remove(terrain);
 	}
 };
