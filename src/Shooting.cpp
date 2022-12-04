@@ -7,12 +7,9 @@
 #include <utility>
 #include <iostream>
 #include <algorithm>
-#include <irrklang/irrKlang.h>
+
 #include "Enemy.hpp"
 #include "physics/Collision.hpp"
-using namespace irrklang;
-
-ISoundEngine* SoundEngine = createIrrKlangDevice();
 
 Gun::Gun(const std::shared_ptr<GameObject>& parent, Transform transform, Model model)
 	: GameObject(parent, transform, std::move(model))
@@ -107,7 +104,7 @@ void Gun::shoot()
 	lastShootTime = static_cast<double>(std::clock());
 	ammo -= 1;
 
-	SoundEngine->play2D("resource/audio/shotgun_shot_01.wav", false);
+	Globals::SoundEngine->play2D("resource/audio/shotgun_shot_01.wav", false);
 }
 
 
@@ -119,11 +116,11 @@ bool Gun::tryReload()
 	state = EGunState::Reloading;
 	std::thread reload([&ammo = ammo, &state = state]()
 	{
-		SoundEngine->play2D("resource/audio/shotgun_load_bullet_01.wav");
+		Globals:: SoundEngine->play2D("resource/audio/shotgun_load_bullet_01.wav");
 		std::this_thread::sleep_for(std::chrono::milliseconds(500));
-		SoundEngine->play2D("resource/audio/shotgun_load_bullet_02.wav");
+		Globals::SoundEngine->play2D("resource/audio/shotgun_load_bullet_02.wav");
 		std::this_thread::sleep_for(std::chrono::milliseconds(500));
-		SoundEngine->play2D("resource/audio/shotgun_cock_01.wav");
+		Globals::SoundEngine->play2D("resource/audio/shotgun_cock_01.wav");
 		ammo = 2;
 		state = Idle;
 	});
