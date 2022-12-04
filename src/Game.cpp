@@ -145,7 +145,7 @@ void Game::processInput(const float dt)
 				// move right
 				horizontalInput += 1.0f;
 			}
-			_player->velocity = ((horizontalInput != 0.0f || forwardInput != 0.0f)
+			_player->rigidBody.velocity = ((horizontalInput != 0.0f || forwardInput != 0.0f)
 				                     ? normalize(glm::vec3(horizontalInput, 0.0f, forwardInput))
 				                     : glm::vec3(0.0f, 0.0f, 0.0f));
 		}

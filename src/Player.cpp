@@ -4,7 +4,7 @@
 
 Player::Player(Transform t, Model model)
 	: GameObject(nullptr, t, std::move(model)),
-	RigidBody(transform, collider),
+	rigidBody(RigidBody(transform, BoxCollider(glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f)))),
 	gun(Gun(
 		nullptr,
 		Transform(glm::vec3(0.0f, 0.0f, 0.0f)),
@@ -12,7 +12,7 @@ Player::Player(Transform t, Model model)
 	))
 {
 	addChild(gun);
-	speed = 4.0f;
+	rigidBody.speed = 4.0f;
 }
 
 void Player::draw(const Shader& shader) const
@@ -32,9 +32,8 @@ void Player::draw(const Shader& shader) const
 
 void Player::update(const float dt)
 {
-	
-	collider.center = transform.position;
-	RigidBody::update(dt);
+	rigidBody.collider.center = transform.position;
+	rigidBody.update(dt);
 
 	// TODO: hierachy
 	
