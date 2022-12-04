@@ -16,7 +16,7 @@ void Terrain::draw(const Shader& shader) const
 	GameObject::draw(shader);
 
 	if (Globals::debug)
-		collider.draw(gAxesShader, transform.getModelMatrix());
+		collider.draw(gAxesShader, translate(glm::mat4(1.0f), transform.position));
 }
 
 TerrainManager::TerrainManager()

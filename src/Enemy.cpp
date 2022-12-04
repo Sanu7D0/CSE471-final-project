@@ -6,11 +6,9 @@ EnemyContainer* EnemyContainer::_instance = nullptr;
 
 Enemy::Enemy(Transform transform, Model model)
 	: GameObject(nullptr, transform, std::move(model)),
-	RigidBody(
-		this->transform, 
-		BoxCollider(glm::vec3(2.5f, 2.5f, 2.5f), transform.position))
+	rigidBody(transform, BoxCollider(glm::vec3(2.5f, 2.5f, 2.5f), transform.position))
 {
-	speed = 2.5f;
+	rigidBody.speed = 2.5f;
 }
 
 void Enemy::update(const float dt)
@@ -28,7 +26,7 @@ void Enemy::update(const float dt)
 	mat[1] = up;
 	mat[2] = forward;
 
-	transform.position += forward * speed * dt;
+	transform.position += forward * rigidBody.speed * dt;
 	transform.rotation = glm::quat_cast(mat);
 
 	//RigidBody::update(dt);
@@ -39,7 +37,7 @@ void Enemy::draw(const Shader& shader) const
 	GameObject::draw(shader);
 
 	if (Globals::debug)
-		collider.draw(gAxesShader, transform.getModelMatrix());
+		collider.draw(gAxesShader, translate(glm::mat4(1.0f), transform.position));
 }
 
 void Enemy::takeDamage(float damage)

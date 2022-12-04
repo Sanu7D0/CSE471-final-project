@@ -6,14 +6,15 @@
 #include "physics/RigidBody.hpp"
 #include "physics/Collider.hpp"
 
-class Enemy : public GameObject, public RigidBody
+class Enemy : public GameObject
 {
 public:
 	Enemy(Transform transform, Model model);
 
+	RigidBody rigidBody;
 	float hp = 10.0f;
 	glm::vec3 targetPosition;
-	BoxCollider collider = BoxCollider(glm::vec3(2.0f, 2.0f, 5.0f));
+	BoxCollider collider = BoxCollider(glm::vec3(2.0f, 2.0f, 2.0f));
 	void update(const float dt) override;
 	void draw(const Shader& shader) const override;
 	void takeDamage(float damage);
