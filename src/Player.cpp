@@ -26,7 +26,8 @@ void Player::draw(const Shader& shader) const
 	shader.use();
 	shader.setVec3("defaultAmbient", glm::vec3(0.0f, 0.0f, 0.0f));
 
-
+	if (Globals::debug)
+		rigidBody.collider.draw(gAxesShader, transform.getModelMatrix());
 	//gun.draw(shader, transform.getModelMatrix());
 }
 

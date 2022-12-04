@@ -21,6 +21,9 @@ class EnemySpawner
 public:
 	void SpawnEnemy()
 	{
+		if (!Globals::spawnEnemy)
+			return;
+
 		const auto currentTime = static_cast<double>(std::clock());
 		if ((currentTime - lastSpawnTime) / CLOCKS_PER_SEC < spawnDuration)
 			return;
@@ -183,6 +186,12 @@ void Game::processInput(const float dt)
 			{
 				flashLight->bEnabled = !flashLight->bEnabled;
 			}
+		}
+
+		if (keys[GLFW_KEY_F4] && !keysProcessed[GLFW_KEY_F4])
+		{
+			keysProcessed[GLFW_KEY_F4] = true;
+			Globals::spawnEnemy = !Globals::spawnEnemy;
 		}
 	}
 }
