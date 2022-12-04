@@ -7,6 +7,9 @@
 #include "Game.hpp"
 #include "Globals.hpp"
 
+constexpr unsigned int SCREEN_WIDTH = 1600;
+constexpr unsigned int SCREEN_HEIGHT = 1200;
+
 std::unique_ptr<Game> gGame;
 
 static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode);
@@ -65,6 +68,7 @@ bool init(GLFWwindow*& window)
 	const auto monitor = glfwGetPrimaryMonitor();
 	const auto mode = glfwGetVideoMode(monitor);
 
+	//window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "BackToCG", nullptr, nullptr);
 	window = glfwCreateWindow(mode->width, mode->height, "BackToCG", monitor, nullptr);
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // Hide cursor
 	glfwMakeContextCurrent(window);
@@ -81,11 +85,13 @@ bool init(GLFWwindow*& window)
 	glfwSetMouseButtonCallback(window, MouseButtonCallback);
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	//glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 	glViewport(0, 0, mode->width, mode->height);
 
 	double firstX, firstY;
 	glfwGetCursorPos(window, &firstX, &firstY);
 
+	//gGame = std::make_unique<Game>(firstX, firstY, SCREEN_WIDTH, SCREEN_HEIGHT);
 	gGame = std::make_unique<Game>(firstX, firstY, mode->width, mode->height);
 	gGame->init();
 

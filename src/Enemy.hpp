@@ -52,5 +52,4 @@ public:
 		enemies.remove(enemy);
 		delete enemy;
 	}
-
 };

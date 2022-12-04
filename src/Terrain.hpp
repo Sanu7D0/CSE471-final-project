@@ -6,6 +6,7 @@
 #include <vector>
 #include <iostream>
 #include <memory>
+#include <list>
 
 #include "GameObject.hpp"
 #include "rendering/Shader.hpp"
@@ -39,4 +40,39 @@ private:
 	void loadTerrain();
 	//void loadCubemap();
 	//void drawCubemap() const;
+};
+
+class TerrainContainer
+{
+private:
+	static TerrainContainer* _instance;
+	std::list<Terrain*> enemies;
+
+	TerrainContainer() {};
+	~TerrainContainer() {};
+	TerrainContainer(TerrainContainer const&) = delete;
+	TerrainContainer& operator=(TerrainContainer const&) = delete;
+
+public:
+	static TerrainContainer* Instance()
+	{
+		if (_instance == nullptr) _instance = new TerrainContainer();
+		return _instance;
+	}
+
+	const std::list<Terrain*>& getContainer()
+	{
+		return enemies;
+	}
+
+	void addEnemy(Terrain* enemy)
+	{
+		enemies.push_back(enemy);
+	}
+
+	void removeEnemy(Terrain* enemy)
+	{
+		enemies.remove(enemy);
+		delete enemy;
+	}
 };
