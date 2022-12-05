@@ -364,7 +364,7 @@ void Game::drawDebugInfo()
 
 	textRenderer.renderText(textShader, "TOOM Eternal",
 	                        0.0f, height - 50.0f, 1.0f);
-	textRenderer.renderText(textShader, std::format("{} fps", Globals::fps),
+	textRenderer.renderText(textShader, std::format("{:.1f} fps", Globals::fps),
 	                        0.0f, height - 100.0f, 1.0f);
 
 	textRenderer.renderText(textShader, std::format("x: {:.2f}", _player->transform.position.x),

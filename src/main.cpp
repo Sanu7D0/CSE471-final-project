@@ -24,14 +24,24 @@ int main(int argc, char* argv[])
 	GLFWwindow* window;
 	if (!init(window)) return -1;
 
+	double prevTime = glfwGetTime();
 	double lastTime = glfwGetTime();
-	//uint32_t frames = 0;
+	uint32_t frames = 0;
 
 	while (!glfwWindowShouldClose(window))
 	{
 		const double currentTime = glfwGetTime();
 		const double deltaTime = currentTime - lastTime;
 		lastTime = currentTime;
+
+		// frame counter
+		frames++;
+		if (currentTime - prevTime >= 1.0) // per 1.0 sec
+		{
+			Globals::fps = double(frames);
+			prevTime = currentTime;
+			frames = 0;
+		}
 
 		glfwPollEvents();
 
@@ -68,8 +78,8 @@ bool init(GLFWwindow*& window)
 	const auto monitor = glfwGetPrimaryMonitor();
 	const auto mode = glfwGetVideoMode(monitor);
 
-	//window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "BackToCG", nullptr, nullptr);
-	window = glfwCreateWindow(mode->width, mode->height, "BackToCG", monitor, nullptr);
+	//window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "TOOM Eternal", nullptr, nullptr);
+	window = glfwCreateWindow(mode->width, mode->height, "TOOM Eternal", monitor, nullptr);
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // Hide cursor
 	glfwMakeContextCurrent(window);
 
