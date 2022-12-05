@@ -12,7 +12,7 @@ public:
     glm::vec3 ambient;
     glm::vec3 diffuse;
     glm::vec3 specular;
-    bool bEnabled = true;
+    bool enabled = true;
 
     Light(glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular);
 };

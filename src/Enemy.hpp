@@ -16,7 +16,7 @@ public:
 	BoxCollider collider = BoxCollider(glm::vec3(2.0f, 2.0f, 2.0f));
 
 	float hp = 10.0f;
-	float damage = 20.0f;
+	float damage = 25.0f;
 	double lastAttackedTime = 0.0;
 	double attackDelay = 1.0;
 
@@ -44,7 +44,7 @@ public:
 		return _instance;
 	}
 
-	const std::list<Enemy*>& getContainer()
+	std::list<Enemy*>& getContainer()
 	{
 		return enemies;
 	}

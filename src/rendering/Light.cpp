@@ -40,7 +40,7 @@ std::shared_ptr<PointLight> LightManager::addPointLight(PointLight light, const 
 
 	shader.use();
 	shader.setInt("pointLightCount", pointLights.size() + 1);
-	shader.setBool("pointLights[" + idx + "].enabled", light.bEnabled);
+	shader.setBool("pointLights[" + idx + "].enabled", light.enabled);
 	shader.setVec3("pointLights[" + idx + "].position", light.position);
 	shader.setVec3("pointLights[" + idx + "].ambient", light.ambient);
 	shader.setVec3("pointLights[" + idx + "].diffuse", light.diffuse);
@@ -60,7 +60,7 @@ std::shared_ptr<SpotLight> LightManager::addSpotLight(SpotLight light, const Sha
 
 	shader.use();
 	shader.setInt("spotLightCount", spotLights.size() + 1);
-	shader.setBool("spotLights[" + idx + "].enabled", light.bEnabled);
+	shader.setBool("spotLights[" + idx + "].enabled", light.enabled);
 	shader.setVec3("spotLights[" + idx + "].position", light.position);
 	shader.setVec3("spotLights[" + idx + "].direction", light.direction);
 	shader.setVec3("spotLights[" + idx + "].ambient", light.ambient);
@@ -82,13 +82,13 @@ void LightManager::update(const Shader& shader)
 	shader.use();
 	for (int i = 0; i < pointLights.size(); ++i)
 	{
-		shader.setBool("pointLights[" + std::to_string(i) + "].enabled", pointLights[i]->bEnabled);
+		shader.setBool("pointLights[" + std::to_string(i) + "].enabled", pointLights[i]->enabled);
 		shader.setVec3("pointLights[" + std::to_string(i) + "].position", pointLights[i]->position);
 	}
 
 	for (int i = 0; i < spotLights.size(); ++i)
 	{
-		shader.setBool("spotLights[" + std::to_string(i) + "].enabled", spotLights[i]->bEnabled);
+		shader.setBool("spotLights[" + std::to_string(i) + "].enabled", spotLights[i]->enabled);
 		shader.setVec3("spotLights[" + std::to_string(i) + "].position", spotLights[i]->position);
 		shader.setVec3("spotLights[" + std::to_string(i) + "].direction", spotLights[i]->direction);
 	}

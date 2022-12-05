@@ -92,11 +92,11 @@ void Gun::shoot()
 	std::thread muzzleFlashEffect([&muzzleFlash = muzzleFlash]()
 	{
 		// enable muzzle light
-		muzzleFlash->bEnabled = true;
+		muzzleFlash->enabled = true;
 
 		// disable muzzle light
 		std::this_thread::sleep_for(std::chrono::milliseconds(50));
-		muzzleFlash->bEnabled = false;
+		muzzleFlash->enabled = false;
 
 	});
 	muzzleFlashEffect.detach();

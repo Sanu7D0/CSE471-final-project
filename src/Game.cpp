@@ -84,15 +84,15 @@ void Game::init()
 	);
 	_player->gun.muzzleFlash = LightManager::Instance()->addPointLight(
 		PointLight(
-			glm::vec3(0.0f, 0.0f, 0.0f),
-			glm::vec3(0.4f, 0.4f, 0.3f),
-			glm::vec3(0.0f, 0.0f, 0.0f),
+			glm::vec3(0.3f, 0.3f, 0.3f),
+			glm::vec3(0.6f, 0.6f, 0.3f),
+			glm::vec3(0.3f, 0.3f, 0.3f),
 			_player->gun.transform.position,
 			1.0f, 0.09f, 0.032f
 		),
 		baseShader
 	);
-	_player->gun.muzzleFlash->bEnabled = false;
+	_player->gun.muzzleFlash->enabled = false;
 
 	terrainManager.init();
 
@@ -106,6 +106,21 @@ void Game::init()
 	Globals::SoundEngine->play2D("resource/audio/bgm.mp3", true);
 }
 
+void Game::reset()
+{
+	auto& enemies = EnemyContainer::Instance()->getContainer();
+	auto iter = enemies.begin();
+	while (iter != enemies.end())
+	{
+		delete (*iter);
+		iter = enemies.erase(iter);
+	}
+
+	_player->hp = 100.0f;
+	_player->gun.ammo = _player->gun.magazineCapacity;
+	_player->transform.position = glm::vec3(0.0f, 0.0f, 0.0f);
+}
+
 void Game::processInput(const float dt)
 {
 	switch (state)
@@ -113,6 +128,14 @@ void Game::processInput(const float dt)
 	case GameIdle:
 		if (keys[GLFW_KEY_ENTER] && !keysProcessed[GLFW_KEY_ENTER])
 		{
+			state = GameActive;
+			keysProcessed[GLFW_KEY_ENTER] = true;
+		}
+		break;
+	case GameEnd:
+		if (keys[GLFW_KEY_ENTER] && !keysProcessed[GLFW_KEY_ENTER])
+		{
+			reset();
 			state = GameActive;
 			keysProcessed[GLFW_KEY_ENTER] = true;
 		}
@@ -204,7 +227,7 @@ void Game::processInput(const float dt)
 			keysProcessed[GLFW_KEY_F] = true;
 			if (const auto flashLight = _player->flashLight.lock(); flashLight != nullptr)
 			{
-				flashLight->bEnabled = !flashLight->bEnabled;
+				flashLight->enabled = !flashLight->enabled;
 			}
 		}
 
@@ -218,6 +241,9 @@ void Game::processInput(const float dt)
 
 void Game::update(const float dt)
 {
+	if (state == EGameState::GameIdle || state == EGameState::GameEnd)
+		return;
+
 	_player->update(dt);
 
 	viewController.cameraControl.followingTarget = _player->transform.position;
@@ -255,41 +281,59 @@ void Game::update(const float dt)
 
 	if (_player->hp <= 0.0f)
 	{
-		// Game end
+		state = GameEnd;
 	}
 }
 
 void Game::render()
 {
-	//if (state == EGameState::GameActive)
-
-	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_CULL_FACE); // Cull triangles which normal is not towards the camera
-
-	baseShader.use();
-	baseShader.setMat4("view", gViewMatrix);
-	baseShader.setMat4("projection", gProjectionMatrix);
-	baseShader.setVec3("viewPos", viewController.cameraControl.eye);
-
-	gAxesShader->use();
-	gAxesShader->setMat4("view", gViewMatrix);
-	gAxesShader->setMat4("projection", gProjectionMatrix);
-
-	for (const auto& go : _gameObjects)
-		go->draw(baseShader);
-
-	for (const auto enemy : EnemyContainer::Instance()->getContainer())
-		enemy->draw(baseShader);
-	
-	terrainManager.draw(baseShader);
-
-	drawUI();
-	if (Globals::debug)
+	if (state == EGameState::GameActive)
 	{
-		drawDebugInfo();
+		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_CULL_FACE); // Cull triangles which normal is not towards the camera
+
+		baseShader.use();
+		baseShader.setMat4("view", gViewMatrix);
+		baseShader.setMat4("projection", gProjectionMatrix);
+		baseShader.setVec3("viewPos", viewController.cameraControl.eye);
+
+		gAxesShader->use();
+		gAxesShader->setMat4("view", gViewMatrix);
+		gAxesShader->setMat4("projection", gProjectionMatrix);
+
+		for (const auto& go : _gameObjects)
+			go->draw(baseShader);
+
+		for (const auto enemy : EnemyContainer::Instance()->getContainer())
+			enemy->draw(baseShader);
+		
+		terrainManager.draw(baseShader);
+
+		drawUI();
+		if (Globals::debug)
+		{
+			drawDebugInfo();
+		}
+	}
+	else if (state == EGameState::GameIdle)
+	{
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		textRenderer.renderText(textShader, "Press ENTER to start...",
+			viewController.cameraControl.width / 3, viewController.cameraControl.height / 2, 2.0f);
+	}
+	else if (state == EGameState::GameEnd)
+	{
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		drawUI();
+		textRenderer.renderText(textShader, "Press ENTER to restart...",
+			viewController.cameraControl.width / 3, viewController.cameraControl.height / 2, 2.0f);
 	}
 }
 
@@ -309,7 +353,7 @@ void Game::drawDebugInfo()
 	//const auto width = static_cast<float>(controller.cameraControl.width);
 	const auto height = static_cast<float>(viewController.cameraControl.height);
 
-	textRenderer.renderText(textShader, "Back To the CG",
+	textRenderer.renderText(textShader, "TOOM Eternal",
 	                        0.0f, height - 50.0f, 1.0f);
 	textRenderer.renderText(textShader, std::format("{} fps", Globals::fps),
 	                        0.0f, height - 100.0f, 1.0f);

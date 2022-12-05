@@ -28,7 +28,7 @@ class Game
 public:
 	ViewController viewController;
 
-	EGameState state = GameActive;
+	EGameState state = EGameState::GameIdle;
 	bool keys[1024] = {};
 	bool keysProcessed[1024] = {};
 	bool mouseButtons[8] = {};
@@ -42,6 +42,7 @@ public:
 	~Game();
 
 	void init();
+	void reset();
 	void processInput(const float dt);
 	void update(const float dt);
 	void render();
