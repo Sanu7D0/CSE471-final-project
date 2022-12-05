@@ -339,6 +339,9 @@ void Game::render()
 
 void Game::drawUI()
 {
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_CULL_FACE);
+
 	const auto width = static_cast<float>(viewController.cameraControl.width);
 	//const auto height = static_cast<float>(controller.cameraControl.height);
 
@@ -346,10 +349,16 @@ void Game::drawUI()
 	                        width - 400.0f, 50.0f, 1.5f);
 	textRenderer.renderText(textShader, std::format("HP: {:.0f}", _player->hp),
 		50.0f, 50.0f, 1.5f);
+
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
 }
 
 void Game::drawDebugInfo()
 {
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_CULL_FACE);
+
 	//const auto width = static_cast<float>(controller.cameraControl.width);
 	const auto height = static_cast<float>(viewController.cameraControl.height);
 
@@ -364,4 +373,7 @@ void Game::drawDebugInfo()
 	                        0.0f, height - 250.0f, 1.0f);
 	textRenderer.renderText(textShader, std::format("z: {:.2f}", _player->transform.position.z),
 	                        0.0f, height - 300.0f, 1.0f);
+
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
 }
