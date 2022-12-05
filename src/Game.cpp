@@ -243,9 +243,20 @@ void Game::update(const float dt)
 	{
 		enemy->targetPosition = _player->transform.position;
 		enemy->update(dt);
+
+		// Collision check for enemy attack
+		if (aabb(_player->rigidBody.collider, enemy->collider))
+		{
+			_player->hp -= enemy->dealDamage();
+		}
 	}
 
 	LightManager::Instance()->update(baseShader);
+
+	if (_player->hp <= 0.0f)
+	{
+		// Game end
+	}
 }
 
 void Game::render()
@@ -289,6 +300,8 @@ void Game::drawUI()
 
 	textRenderer.renderText(textShader, std::format("Ammo: {}", _player->gun.ammo),
 	                        width - 400.0f, 50.0f, 1.5f);
+	textRenderer.renderText(textShader, std::format("HP: {:.0f}", _player->hp),
+		50.0f, 50.0f, 1.5f);
 }
 
 void Game::drawDebugInfo()

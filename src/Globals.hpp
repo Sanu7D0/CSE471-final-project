@@ -4,7 +4,7 @@
 
 namespace Globals
 {
-	inline bool debug = true;
+	inline bool debug = false;
 	inline double fps = 0.0;
 	inline glm::vec3 gravity = glm::vec3(0.0f, -9.8f, 0.0f);
 	inline bool spawnEnemy = true;

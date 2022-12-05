@@ -48,3 +48,13 @@ void Enemy::takeDamage(float damage)
 		EnemyContainer::Instance()->removeEnemy(this);
 	}
 }
+
+float Enemy::dealDamage()
+{
+	const auto currentTime = static_cast<double>(std::clock());
+	if ((currentTime - lastAttackedTime) / CLOCKS_PER_SEC < attackDelay)
+		return 0.0f;
+
+	lastAttackedTime = currentTime;
+	return damage;
+}

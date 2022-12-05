@@ -1,6 +1,5 @@
 #pragma once
 #include <glad/glad.h>
-//#include <AL/al.h>
 
 #include <memory>
 #include <vector>
@@ -13,7 +12,6 @@
 #include "rendering/TextRenderer.hpp"
 #include "rendering/Light.hpp"
 #include "Globals.hpp"
-//#include "ResourceManger.hpp"
 
 inline glm::mat4 gViewMatrix;
 inline glm::mat4 gProjectionMatrix;
@@ -22,6 +20,7 @@ enum EGameState
 {
 	GameIdle,
 	GameActive,
+	GameEnd
 };
 
 class Game

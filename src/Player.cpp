@@ -12,7 +12,7 @@ Player::Player(Transform t, Model model)
 	))
 {
 	addChild(gun);
-	rigidBody.speed = 4.0f;
+	rigidBody.speed = 10.0f;
 }
 
 void Player::draw(const Shader& shader) const

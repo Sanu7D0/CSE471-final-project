@@ -11,6 +11,7 @@ class Player : public GameObject
 public:
 	Gun gun;
 	RigidBody rigidBody;
+	float hp = 100.0f;
 
 	std::weak_ptr<SpotLight> flashLight;
 	Player(Transform t, Model model);

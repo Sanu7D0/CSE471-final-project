@@ -12,12 +12,18 @@ public:
 	Enemy(Transform transform, Model model);
 
 	RigidBody rigidBody;
-	float hp = 10.0f;
 	glm::vec3 targetPosition;
 	BoxCollider collider = BoxCollider(glm::vec3(2.0f, 2.0f, 2.0f));
+
+	float hp = 10.0f;
+	float damage = 20.0f;
+	double lastAttackedTime = 0.0;
+	double attackDelay = 1.0;
+
 	void update(const float dt) override;
 	void draw(const Shader& shader) const override;
 	void takeDamage(float damage);
+	float dealDamage();
 };
 
 class EnemyContainer
