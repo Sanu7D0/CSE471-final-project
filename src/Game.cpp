@@ -195,7 +195,7 @@ void Game::processInput(const float dt)
 			Globals::debug = !Globals::debug;
 		}
 
-	// Player movement
+		// Player movement
 		{
 			float horizontalInput = 0.0f;
 			float forwardInput = 0.0f;
@@ -243,7 +243,7 @@ void Game::processInput(const float dt)
 			}
 		}
 
-	// FPS / TPS toggle
+		// FPS / TPS toggle
 		if (keys[GLFW_KEY_V] && !keysProcessed[GLFW_KEY_V])
 		{
 			keysProcessed[GLFW_KEY_V] = true;
@@ -258,7 +258,7 @@ void Game::processInput(const float dt)
 			}
 		}
 
-	// Gun shooting
+		// Gun shooting
 		if (mouseButtons[GLFW_MOUSE_BUTTON_LEFT])
 		{
 			_player->gun.tryShoot();
@@ -276,6 +276,16 @@ void Game::processInput(const float dt)
 			{
 				flashLight->enabled = !flashLight->enabled;
 			}
+		}
+		if (keys[GLFW_KEY_N] && !keysProcessed[GLFW_KEY_N]) // Toggle night vision
+		{
+			keysProcessed[GLFW_KEY_N] = true;
+
+			nightVision = !nightVision;
+			baseShader.use();
+			baseShader.setBool("nightVision", nightVision);
+			screenShader.use();
+			screenShader.setBool("nightVision", nightVision);
 		}
 
 		if (keys[GLFW_KEY_F4] && !keysProcessed[GLFW_KEY_F4])
@@ -359,11 +369,6 @@ void Game::render()
 			enemy->draw(baseShader);
 		
 		terrainManager.draw(baseShader);
-		drawUI();
-		if (Globals::debug)
-		{
-			drawDebugInfo();
-		}
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		glDisable(GL_DEPTH_TEST);
@@ -375,9 +380,17 @@ void Game::render()
 		glBindVertexArray(screenQuadVAO);
 		glBindTexture(GL_TEXTURE_2D, textureColorBuffer);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
+
+		drawUI();
+		if (Globals::debug)
+		{
+			drawDebugInfo();
+		}
 	}
 	else if (state == EGameState::GameIdle)
 	{
+		glDisable(GL_DEPTH_TEST);
+
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -386,6 +399,8 @@ void Game::render()
 	}
 	else if (state == EGameState::GameEnd)
 	{
+		glDisable(GL_DEPTH_TEST);
+
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -397,9 +412,6 @@ void Game::render()
 
 void Game::drawUI()
 {
-	glDisable(GL_DEPTH_TEST);
-	glDisable(GL_CULL_FACE);
-
 	const auto width = static_cast<float>(viewController.cameraControl.width);
 	//const auto height = static_cast<float>(controller.cameraControl.height);
 
@@ -407,16 +419,10 @@ void Game::drawUI()
 	                        width - 400.0f, 50.0f, 1.5f);
 	textRenderer.renderText(textShader, std::format("HP: {:.0f}", _player->hp),
 		50.0f, 50.0f, 1.5f);
-
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_CULL_FACE);
 }
 
 void Game::drawDebugInfo()
 {
-	glDisable(GL_DEPTH_TEST);
-	glDisable(GL_CULL_FACE);
-
 	//const auto width = static_cast<float>(controller.cameraControl.width);
 	const auto height = static_cast<float>(viewController.cameraControl.height);
 
@@ -431,7 +437,4 @@ void Game::drawDebugInfo()
 	                        0.0f, height - 250.0f, 1.0f);
 	textRenderer.renderText(textShader, std::format("z: {:.2f}", _player->transform.position.z),
 	                        0.0f, height - 300.0f, 1.0f);
-
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_CULL_FACE);
 }

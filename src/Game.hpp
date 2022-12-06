@@ -58,6 +58,9 @@ private:
 	TerrainManager terrainManager = TerrainManager();
 	//irrklang::ISoundEngine* soundEngine;
 	double lastplayTime = 0.0;
+
+	bool nightVision = false;
+
 	void drawUI();
 	void drawDebugInfo();
 };
