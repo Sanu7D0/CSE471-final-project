@@ -1,5 +1,6 @@
 #pragma once
 #include <glad/glad.h>
+#include <GLFW/glfw3.h>
 
 #include <memory>
 #include <vector>
@@ -60,6 +61,7 @@ private:
 	double lastplayTime = 0.0;
 
 	bool nightVision = false;
+	Image nightVisionNoise = Image("resource/texture/noise.jpg", true);
 
 	void drawUI();
 	void drawDebugInfo();

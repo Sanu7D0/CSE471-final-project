@@ -8,41 +8,44 @@
 class Image
 {
 public:
-	Image(const std::string& path)
+	Image(const std::string& path, bool repeat = true)
 	{
-		load(path);
+		load(path, repeat);
 	}
 
 	void draw(const Shader& shader)
 	{
 		shader.use();
+
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
+
+	void bindTexture(const Shader& shader, const std::string& name, int unit = 0)
+	{
+		glActiveTexture(GL_TEXTURE0 + unit);
+		glBindTexture(GL_TEXTURE_2D, _textureID);
 	}
 
 private:
 	GLuint _textureID;
 	int _width, _height;
 
-	void load(const std::string& path)
+	void load(const std::string& path, bool repeat=false)
 	{
 		int nrComponents;
 		if (unsigned char* data = stbi_load(path.c_str(), &_width, &_height, &nrComponents, 0))
 		{
-
-			GLenum format = GL_RGB;
-			if (nrComponents == 1)
-				format = GL_RED;
-			else if (nrComponents == 3)
-				format = GL_RGB;
-			else if (nrComponents == 4)
-				format = GL_RGBA;
-
 			glGenTextures(1, &_textureID);
 			glBindTexture(GL_TEXTURE_2D, _textureID);
 
-			//glTexImage2D(GL_TEXTURE_2D, 0, format, _width, _height, 0, format, GL_UNSIGNED_BYTE, data);
-			glTexImage2D(GL_TEXTURE_2D, 0, format, _width, _height, 0, format, GL_UNSIGNED_BYTE, NULL);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, _width, _height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			if (repeat)
+			{
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+			}
 
 			glBindTexture(GL_TEXTURE_2D, 0);
 			stbi_image_free(data);
@@ -53,5 +56,6 @@ private:
 			stbi_image_free(data);
 			return;
 		}
+		std::cout << "Load image: " << path << "\n";
 	}
 };

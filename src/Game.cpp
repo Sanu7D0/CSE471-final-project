@@ -79,9 +79,6 @@ Game::Game(double firstX, double firstY, int width, int height)
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
 
-	screenShader.use();
-	screenShader.setInt("screenTexture", 0);
-
 	// Framebuffer configuration
 	glGenFramebuffers(1, &frameBuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
@@ -102,6 +99,10 @@ Game::Game(double firstX, double firstY, int width, int height)
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		std::cerr << "Frame buffer configuration error." << std::endl;
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	screenShader.use();
+	screenShader.setInt("screenTexture", 0);
+	screenShader.setInt("noiseTexture", 1);
 }
 
 Game::~Game()
@@ -376,11 +377,20 @@ void Game::render()
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
+		// Post-processing
 		screenShader.use();
-		glBindVertexArray(screenQuadVAO);
+		screenShader.setInt("screenTexture", 0);
+		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, textureColorBuffer);
-		glDrawArrays(GL_TRIANGLES, 0, 6);
+		nightVisionNoise.bindTexture(screenShader, "noiseTexture", 1);
 
+		screenShader.setFloat("elapsedTime", glfwGetTime());
+
+		glBindVertexArray(screenQuadVAO);
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+		glBindVertexArray(0);
+
+		// UIs
 		drawUI();
 		if (Globals::debug)
 		{
@@ -427,14 +437,14 @@ void Game::drawDebugInfo()
 	const auto height = static_cast<float>(viewController.cameraControl.height);
 
 	textRenderer.renderText(textShader, "TOOM Eternal",
-	                        0.0f, height - 50.0f, 1.0f);
-	textRenderer.renderText(textShader, std::format("{:.1f} fps", Globals::fps),
 	                        0.0f, height - 100.0f, 1.0f);
+	textRenderer.renderText(textShader, std::format("{:.1f} fps", Globals::fps),
+	                        0.0f, height - 150.0f, 1.0f);
 
 	textRenderer.renderText(textShader, std::format("x: {:.2f}", _player->transform.position.x),
-	                        0.0f, height - 200.0f, 1.0f);
-	textRenderer.renderText(textShader, std::format("y: {:.2f}", _player->transform.position.y),
 	                        0.0f, height - 250.0f, 1.0f);
-	textRenderer.renderText(textShader, std::format("z: {:.2f}", _player->transform.position.z),
+	textRenderer.renderText(textShader, std::format("y: {:.2f}", _player->transform.position.y),
 	                        0.0f, height - 300.0f, 1.0f);
+	textRenderer.renderText(textShader, std::format("z: {:.2f}", _player->transform.position.z),
+	                        0.0f, height - 350.0f, 1.0f);
 }

@@ -18,7 +18,7 @@ Player::Player(Transform t, Model model)
 void Player::draw(const Shader& shader) const
 {
 	shader.use();
-	shader.setVec3("defaultAmbient", glm::vec3(0.3f, 0.3f, 0.3f));
+	shader.setVec3("defaultAmbient", glm::vec3(0.2f, 0.2f, 0.2f));
 
 	GameObject::draw(shader);
 	gun.draw(shader);

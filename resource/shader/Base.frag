@@ -67,13 +67,14 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
 
 // Effects
 uniform bool nightVision = false;
+vec3 nightVisionAmbient = vec3(0.2, 0.2, 0.2);
 
 void main() 
 {
+    // Lights
     vec3 norm = normalize(Normal);
     vec3 viewDir = normalize(viewPos - FragPos);
 
-    // Lights
     vec3 result = CalcDirLight(dirLight, norm, viewDir);
     for (int i = 0; i < pointLightCount; i++)
     {
@@ -87,9 +88,13 @@ void main()
     }
     result += defaultAmbient * vec3(texture(texture_diffuse1, TexCoord));
 
+
     if (nightVision)
     {
-        // 
+        // Decreas light weight
+        result *= 0.5;
+
+        result += nightVisionAmbient * vec3(texture(texture_diffuse1, TexCoord));
     }
     
     gl_FragColor = vec4(result, 1.0);
