@@ -13,7 +13,16 @@
 
 #include "Enemy.hpp"
 
+float screenQuadVertices[] = {
+	// positions   // texCoords
+	-1.0f,  1.0f,  0.0f, 1.0f,
+	-1.0f, -1.0f,  0.0f, 0.0f,
+	 1.0f, -1.0f,  1.0f, 0.0f,
 
+	-1.0f,  1.0f,  0.0f, 1.0f,
+	 1.0f, -1.0f,  1.0f, 0.0f,
+	 1.0f,  1.0f,  1.0f, 1.0f
+};
 
 class EnemySpawner
 {
@@ -50,11 +59,49 @@ Game::Game(double firstX, double firstY, int width, int height)
 		  gViewMatrix,
 		  gProjectionMatrix),
 	baseShader(Shader("resource/shader/Base.vert", "resource/shader/Base.frag")),
+	screenShader(Shader("resource/shader/Screen.vert", "resource/shader/Screen.frag")),
 	textShader(Shader("resource/shader/Text.vert", "resource/shader/Text.frag")),
 	textRenderer(static_cast<float>(width), static_cast<float>(height), "resource/font/DroidSansMono.ttf")
 {	
 	InitAxesShader();
 	//soundEngine = irrklang::createIrrKlangDevice();
+
+
+	// Screen qaud
+	glGenVertexArrays(1, &screenQuadVAO);
+	glGenBuffers(1, &screenQuadVBO);
+
+	glBindVertexArray(screenQuadVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, screenQuadVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(screenQuadVertices), &screenQuadVertices, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+
+	screenShader.use();
+	screenShader.setInt("screenTexture", 0);
+
+	// Framebuffer configuration
+	glGenFramebuffers(1, &frameBuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+
+	glGenTextures(1, &textureColorBuffer);
+	glBindTexture(GL_TEXTURE_2D, textureColorBuffer);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorBuffer, 0);
+	//glBindTexture(GL_TEXTURE_2D, 0);
+
+	glGenRenderbuffers(1, &RBO);
+	glBindRenderbuffer(GL_RENDERBUFFER, RBO);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, RBO);
+
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+		std::cerr << "Frame buffer configuration error." << std::endl;
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 Game::~Game()
@@ -289,11 +336,12 @@ void Game::render()
 {
 	if (state == EGameState::GameActive)
 	{
-		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+		glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE); // Cull triangles which normal is not towards the camera
+
+		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		baseShader.use();
 		baseShader.setMat4("view", gViewMatrix);
@@ -311,12 +359,22 @@ void Game::render()
 			enemy->draw(baseShader);
 		
 		terrainManager.draw(baseShader);
-
 		drawUI();
 		if (Globals::debug)
 		{
 			drawDebugInfo();
 		}
+
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glDisable(GL_DEPTH_TEST);
+
+		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		screenShader.use();
+		glBindVertexArray(screenQuadVAO);
+		glBindTexture(GL_TEXTURE_2D, textureColorBuffer);
+		glDrawArrays(GL_TRIANGLES, 0, 6);
 	}
 	else if (state == EGameState::GameIdle)
 	{

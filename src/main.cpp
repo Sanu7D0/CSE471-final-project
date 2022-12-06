@@ -78,8 +78,13 @@ bool init(GLFWwindow*& window)
 	const auto monitor = glfwGetPrimaryMonitor();
 	const auto mode = glfwGetVideoMode(monitor);
 
-	//window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "TOOM Eternal", nullptr, nullptr);
-	window = glfwCreateWindow(mode->width, mode->height, "TOOM Eternal", monitor, nullptr);
+	const unsigned int width = mode->width;
+	const unsigned int height = mode->height;
+	//const float width = SCREEN_WIDTH;
+	//const float height = SCREEN_HEIGHT;
+
+	//window = glfwCreateWindow(width, height, "TOOM Eternal", monitor, nullptr); // Full screen
+	window = glfwCreateWindow(width, height, "TOOM Eternal", nullptr, nullptr);
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // Hide cursor
 	glfwMakeContextCurrent(window);
 
@@ -95,14 +100,12 @@ bool init(GLFWwindow*& window)
 	glfwSetMouseButtonCallback(window, MouseButtonCallback);
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-	//glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-	glViewport(0, 0, mode->width, mode->height);
+	glViewport(0, 0, width, height);
 
 	double firstX, firstY;
 	glfwGetCursorPos(window, &firstX, &firstY);
 
-	//gGame = std::make_unique<Game>(firstX, firstY, SCREEN_WIDTH, SCREEN_HEIGHT);
-	gGame = std::make_unique<Game>(firstX, firstY, mode->width, mode->height);
+	gGame = std::make_unique<Game>(firstX, firstY, width, height);
 	gGame->init();
 
 	return true;

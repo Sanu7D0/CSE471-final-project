@@ -11,6 +11,7 @@
 #include "rendering/Shader.hpp"
 #include "rendering/TextRenderer.hpp"
 #include "rendering/Light.hpp"
+#include "rendering/Image.hpp"
 #include "Globals.hpp"
 
 inline glm::mat4 gViewMatrix;
@@ -35,6 +36,7 @@ public:
 
 	Shader baseShader;
 	Shader textShader;
+	Shader screenShader;
 	TextRenderer textRenderer;
 
 
@@ -48,6 +50,9 @@ public:
 	void render();
 
 private:
+	GLuint frameBuffer, textureColorBuffer, RBO;
+	GLuint screenQuadVAO, screenQuadVBO;
+
 	std::shared_ptr<Player> _player;
 	std::vector<std::shared_ptr<GameObject>> _gameObjects;
 	TerrainManager terrainManager = TerrainManager();
